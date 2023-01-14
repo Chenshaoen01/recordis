@@ -1,35 +1,6 @@
 <!-- eslint-disable vuejs-accessibility/anchor-has-content -->
 <template>
   <div class="home">
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark">
-      <div class="container-fluid">
-        <img src="../assets/images/LOGO/logo4.png" style="width:150px;" alt="">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-         data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"><i class="bi bi-list text-white fs-3"></i></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item d-flex align-items-center">
-              <a class="nav-link text-white me-3" aria-current="page" href="#">首頁</a>
-            </li>
-            <li class="nav-item d-flex align-items-center">
-              <a class="nav-link text-white me-3" href="#">關於我們</a>
-            </li>
-            <li class="nav-item d-flex align-items-center">
-              <a class="nav-link text-white me-3" href="#">菜單介紹</a>
-            </li>
-            <li class="nav-item d-flex align-items-center">
-              <a class="nav-link text-white me-3 fs-4" href="#">
-                <i class="bi bi-bag-heart"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
     <!-- header -->
     <div class="position-absolute d-flex justify-content-center
      align-items-center" id="homepage-header">
@@ -46,6 +17,43 @@
         <a href="#" class="text-white fs-4 text-decoration-none">預約外帶</a>
       </div>
     </div>
+    <!-- 品牌理念 -->
+    <div class="container mt-4 d-flex flex-column align-items-center justify-contnent-center">
+      <div id="introduction1"
+      class="w-100 d-flex justify-content-center align-items-end">
+        <div id="introduction1-box" class="position-relative mb-5 border border-dark border-2
+         d-flex justify-content-lg-end  justify-content-center align-items-end">
+          <div id="introduction1-img"
+          class="position-absolute"></div>
+          <div id="introduction1-text">
+            <h1 class="fw-bold mb-5">對品質的堅持</h1>
+            <p class="fs-3">有機栽種安全衛生</p>
+            <p class="fs-3">手工麵條口感獨特</p>
+          </div>
+        </div>
+      </div>
+      <div id="introduction2"
+      class="w-100 d-flex justify-content-center align-items-end">
+        <div id="introduction2-box" class="position-relative mb-5 border border-dark border-2
+         d-flex justify-content-lg-start justify-content-center align-items-end">
+          <div id="introduction2-img"
+          class="position-absolute"></div>
+          <div id="introduction2-text" class="text-center">
+            <h2 class="fw-bold">Recordis</h2>
+            <h2 class="fw-bold mb-5">在拉丁文中代表著記憶</h2>
+            <p class="fs-6 lh-sm">兒時第一次嚐到義大利麵的新奇口感</p>
+            <p class="fs-6 lh-sm">學生時期伴隨朋友嘻笑入口的濃郁歡樂</p>
+            <p class="fs-6 lh-sm">與家人一起分享佳餚時的平凡幸福</p>
+            <p class="fs-6 lh-sm">期待在Recordis與您相遇</p>
+            <p class="fs-6 lh-sm">與您細細品嚐過去的回憶</p>
+            <p class="fs-6 lh-sm">也在這裡創造更多美好體驗</p>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="mb-5 mx-auto btn btn-dark" style="width:150px;">
+          查看品牌理念
+      </button>
+    </div>
     <!-- 推薦餐點 -->
     <div>
       <div class="position-relative" style="height:50px;">
@@ -57,7 +65,7 @@
       </div>
     </div>
     <!-- 餐點卡片 -->
-    <div class="container w-75 my-4">
+    <div class="container my-4">
       <div class="row g-3 gx-xl-0 row-cols-2 row-cols-lg-3">
         <div class="col d-flex justify-content-center">
           <div class="card border-dark" style="width: 18rem;">
@@ -164,35 +172,6 @@
         <button type="button" class="mt-5 mb-3 mx-auto btn btn-dark" style="width:150px;">
           查看所有餐點
         </button>
-      </div>
-    </div>
-    <!-- footer -->
-    <div class="bg-dark pt-5" style="width:100%;">
-      <div class="w-75 mx-auto d-flex justify-content-center border-top border-bottom pt-4">
-        <div class="me-5 my-auto">
-          <img src="../assets/images/LOGO/logo2.png" style="width:150px; height:150px;" alt="">
-        </div>
-        <div>
-          <p class="text-white">
-            Line 官方社群 ：<a href="#" class="text-white text-decoration-none">Recordis Pasta</a>
-          </p>
-          <p class="text-white">
-            FaceBook ：<a href="#" class="text-white text-decoration-none">Recordis Pasta</a>
-          </p>
-          <p class="text-white">
-            Instagram ：<a href="#" class="text-white text-decoration-none">Recordis Pasta</a>
-          </p>
-          <p class="text-white">
-            Email：<a href="#" class="text-white text-decoration-none">recordis@gmail.com</a>
-          </p>
-          <p class="text-white">
-            Email：<a href="#" class="text-white text-decoration-none">recordis@gmail.com</a>
-          </p>
-        </div>
-      </div>
-      <div class="w-75 mx-auto d-flex-column align-items-center justify-content-center py-4">
-        <p class="text-white text-center">CopyRight © recordis all rights reserved 2023</p>
-        <p class="text-white text-center">僅作為個人作品使用 ，無商業用途 </p>
       </div>
     </div>
   </div>
