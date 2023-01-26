@@ -18,9 +18,28 @@ const routes = [
     component: () => import('../views/ProductList.vue'),
   },
   {
-    path: '/productdetail',
+    path: '/productdetail/:id',
     name: 'productdetail',
     component: () => import('../views/ProductDetail.vue'),
+  },
+  {
+    path: '/takeaway',
+    name: 'takeaway',
+    component: () => import('../views/TakeAway.vue'),
+  },
+  {
+    path: '/fooddelivery',
+    component: () => import('../views/FoodDelivery.vue'),
+  },
+  {
+    path: '/orderpage',
+    name: 'orderpage',
+    component: () => import('../views/OrderPage.vue'),
+  },
+  {
+    path: '/orderbuilt/:id',
+    name: 'orderbuilt',
+    component: () => import('../views/OrderBuilt.vue'),
   },
 ];
 

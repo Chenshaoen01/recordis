@@ -1,6 +1,8 @@
 <!-- eslint-disable vuejs-accessibility/anchor-has-content -->
 <template>
   <div class="home">
+    <!-- 廣告Modal -->
+    <advertisementModal ref="advertisementModal"></advertisementModal>
     <!-- header -->
     <div class="position-absolute d-flex justify-content-center
      align-items-center" id="homepage-header">
@@ -15,6 +17,25 @@
         <a href="#" class="text-white fs-4 text-decoration-none">菜單介紹</a>
         <span class="mx-5">X</span>
         <a href="#" class="text-white fs-4 text-decoration-none">預約外帶</a>
+      </div>
+    </div>
+    <!-- 消費方式 -->
+    <div class="row p-5 mx-auto g-5 d-flex flex-column flex-md-row" style="max-width:800px;">
+      <div class="col">
+        <div class="border border-dark border-3 rounded-5 text-center p-5 link-hover"
+         style="height:350px">
+          <h2 class="w-75 fw-bold border-bottom border-dark border-3 mx-auto my-4 pb-3">預約外帶</h2>
+          <p class="fs-4 my-3">預約餐點</p>
+          <p class="fs-4 my-3">省時方便</p>
+        </div>
+      </div>
+      <div class="col">
+        <div class="border border-dark border-3 rounded-5 text-center p-5 link-hover"
+         style="height:350px">
+          <h2 class="w-75 fw-bold border-bottom border-dark border-3 mx-auto my-4 pb-3">外送到府</h2>
+          <p class="fs-4 my-3">餐點費用達300元可免費外送</p>
+          <p class="fs-6 my-3">(未達300元外送費用50元)</p>
+        </div>
       </div>
     </div>
     <!-- 品牌理念 -->
@@ -69,7 +90,7 @@
       <div class="row g-3 gx-xl-0 row-cols-2 row-cols-lg-3">
         <div class="col d-flex justify-content-center">
           <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pexels-lisa-fotios-1279330.jpg"
+            <img src="../assets/images/pasta/pasta2.jpg"
              class="card-img-top" alt="...">
             <div class="card-body border-bottom border-dark">
               <h5 class="card-title">青醬蛤蜊義大利麵</h5>
@@ -86,7 +107,7 @@
         </div>
         <div class="col d-flex justify-content-center">
           <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pexels-federico-ramirez-12006395.jpg"
+            <img src="../assets/images/pasta/pasta2.jpg"
              class="card-img-top" alt="...">
             <div class="card-body border-bottom border-dark">
               <h5 class="card-title">青醬蛤蜊義大利麵</h5>
@@ -103,7 +124,7 @@
         </div>
         <div class="col d-flex justify-content-center">
           <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pexels-federico-ramirez-12006395.jpg"
+            <img src="../assets/images/pasta/pasta2.jpg"
              class="card-img-top" alt="...">
             <div class="card-body border-bottom border-dark">
               <h5 class="card-title">青醬蛤蜊義大利麵</h5>
@@ -120,7 +141,7 @@
         </div>
         <div class="col d-flex justify-content-center">
           <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pexels-federico-ramirez-12006395.jpg"
+            <img src="../assets/images/pasta/pasta2.jpg"
              class="card-img-top" alt="...">
             <div class="card-body border-bottom border-dark">
               <h5 class="card-title">青醬蛤蜊義大利麵</h5>
@@ -137,7 +158,7 @@
         </div>
         <div class="col d-flex justify-content-center">
           <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pexels-federico-ramirez-12006395.jpg"
+            <img src="../assets/images/pasta/pasta2.jpg"
              class="card-img-top" alt="...">
             <div class="card-body border-bottom border-dark">
               <h5 class="card-title">青醬蛤蜊義大利麵</h5>
@@ -154,7 +175,7 @@
         </div>
         <div class="col d-flex justify-content-center">
           <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pexels-federico-ramirez-12006395.jpg"
+            <img src="../assets/images/pasta/pasta2.jpg"
              class="card-img-top" alt="...">
             <div class="card-body border-bottom border-dark">
               <h5 class="card-title">青醬蛤蜊義大利麵</h5>
@@ -178,7 +199,11 @@
 </template>
 
 <script>
+import advertisementModal from '../components/AdvertisementModal.vue';
+
 export default {
-  name: 'HomeView',
+  components: {
+    advertisementModal,
+  },
 };
 </script>
