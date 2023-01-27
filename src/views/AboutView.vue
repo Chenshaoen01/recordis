@@ -1,4 +1,5 @@
 <template>
+  <LoadingPage ref="loadingPage"></LoadingPage>
   <div class="container">
     <!-- 上半 -->
     <div class="row mt-5 mb-3">
@@ -40,3 +41,30 @@
     </div>
   </div>
 </template>
+
+<script>
+import LoadingPage from './LoadingPage.vue';
+
+export default {
+  data() {
+    return {
+
+    };
+  },
+  components: {
+    LoadingPage,
+  },
+  methods: {
+    // 載入中畫面
+    loading() {
+      this.$refs.loadingPage.loadingPageShow();
+      setTimeout(() => {
+        this.$refs.loadingPage.loadingPageHide();
+      }, 1500);
+    },
+  },
+  mounted() {
+    this.loading();
+  },
+};
+</script>

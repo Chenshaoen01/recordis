@@ -47,55 +47,23 @@
   <!-- 推薦餐點 -->
   <div class="container my-4">
     <div class="row g-3 row-cols-1 row-cols-md-3">
-      <div class="col d-flex justify-content-center">
-        <div class="card border-dark">
-          <img src="../assets/images/pasta/pasta2.jpg" class="card-img-top" alt="...">
-          <div class="card-body border-bottom border-dark">
-            <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-            <p class="card-text">$120</p>
-          </div>
-          <div class="d-flex" style="height:30px;">
-            <a class="d-block text-dark text-center text-decoration-none
+      <div class="col d-flex justify-content-center"
+         v-for="(item) in recommandedProducts" :key="item.id">
+          <div class="card border-dark" style="width: 18rem;">
+            <img :src="item.imageUrl" class="card-img-top" alt="...">
+            <div class="card-body border-bottom border-dark">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-text">{{ item.price }}</p>
+            </div>
+            <div class="d-flex" style="height:30px;">
+              <a class="d-block text-dark text-center text-decoration-none
             border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-            <a class="d-block text-dark text-center text-decoration-none w-50
-                             lh-lg" href="#">
-              預約外帶
-            </a>
+              <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
+                預約外帶
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="col d-flex justify-content-center">
-        <div class="card border-dark">
-          <img src="../assets/images/pasta/pasta2.jpg" class="card-img-top" alt="...">
-          <div class="card-body border-bottom border-dark">
-            <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-            <p class="card-text">$120</p>
-          </div>
-          <div class="d-flex" style="height:30px;">
-            <a class="d-block text-dark text-center text-decoration-none
-             border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-            <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
-              預約外帶
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="col d-flex justify-content-center">
-        <div class="card border-dark">
-          <img src="../assets/images/pasta/pasta2.jpg" class="card-img-top" alt="...">
-          <div class="card-body border-bottom border-dark">
-            <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-            <p class="card-text">$120</p>
-          </div>
-          <div class="d-flex" style="height:30px;">
-            <a class="d-block text-dark text-center text-decoration-none
-            border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-            <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
-              預約外帶
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   <div class="mt-5 mb-3 w-100 d-flex justify-content-center">
@@ -113,6 +81,8 @@ export default {
     return {
       productsDetail: {},
       orderQuantity: 1,
+      recommandedProductsId: ['-NLv3-t7xMq-IJo3w3U0', '-NLv5M6uQiOXcEsiLkIu', '-NLv092hsFRNH-Rfjeg2'],
+      recommandedProducts: [],
     };
   },
   components: {
@@ -127,6 +97,12 @@ export default {
         console.log(res);
         this.productsDetail = res.data.product;
         console.log(this.productsDetail);
+      });
+    },
+    getrecommandedProducts(id) {
+      const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/product/${id}`;
+      this.axios.get(api).then((res) => {
+        this.recommandedProducts.push(res.data.product);
       });
     },
     // 更改數量
@@ -167,6 +143,10 @@ export default {
   },
   created() {
     this.getProductDetail();
+    this.recommandedProductsId.forEach((item) => {
+      this.getrecommandedProducts(item);
+    });
+    console.log(this.recommandedProducts);
   },
 };
 </script>

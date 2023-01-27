@@ -88,98 +88,13 @@
     <!-- 餐點卡片 -->
     <div class="container my-4">
       <div class="row g-3 gx-xl-0 row-cols-2 row-cols-lg-3">
-        <div class="col d-flex justify-content-center">
+        <div class="col d-flex justify-content-center"
+         v-for="(item) in recommandedProducts" :key="item.id">
           <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pasta2.jpg"
-             class="card-img-top" alt="...">
+            <img :src="item.imageUrl" class="card-img-top" alt="...">
             <div class="card-body border-bottom border-dark">
-              <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-              <p class="card-text">$120</p>
-            </div>
-            <div class="d-flex" style="height:30px;">
-              <a class="d-block text-dark text-center text-decoration-none
-            border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-              <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
-                預約外帶
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col d-flex justify-content-center">
-          <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pasta2.jpg"
-             class="card-img-top" alt="...">
-            <div class="card-body border-bottom border-dark">
-              <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-              <p class="card-text">$120</p>
-            </div>
-            <div class="d-flex" style="height:30px;">
-              <a class="d-block text-dark text-center text-decoration-none
-            border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-              <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
-                預約外帶
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col d-flex justify-content-center">
-          <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pasta2.jpg"
-             class="card-img-top" alt="...">
-            <div class="card-body border-bottom border-dark">
-              <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-              <p class="card-text">$120</p>
-            </div>
-            <div class="d-flex" style="height:30px;">
-              <a class="d-block text-dark text-center text-decoration-none
-            border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-              <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
-                預約外帶
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col d-flex justify-content-center">
-          <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pasta2.jpg"
-             class="card-img-top" alt="...">
-            <div class="card-body border-bottom border-dark">
-              <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-              <p class="card-text">$120</p>
-            </div>
-            <div class="d-flex" style="height:30px;">
-              <a class="d-block text-dark text-center text-decoration-none
-            border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-              <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
-                預約外帶
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col d-flex justify-content-center">
-          <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pasta2.jpg"
-             class="card-img-top" alt="...">
-            <div class="card-body border-bottom border-dark">
-              <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-              <p class="card-text">$120</p>
-            </div>
-            <div class="d-flex" style="height:30px;">
-              <a class="d-block text-dark text-center text-decoration-none
-            border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-              <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
-                預約外帶
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col d-flex justify-content-center">
-          <div class="card border-dark" style="width: 18rem;">
-            <img src="../assets/images/pasta/pasta2.jpg"
-             class="card-img-top" alt="...">
-            <div class="card-body border-bottom border-dark">
-              <h5 class="card-title">青醬蛤蜊義大利麵</h5>
-              <p class="card-text">$120</p>
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-text">{{ item.price }}</p>
             </div>
             <div class="d-flex" style="height:30px;">
               <a class="d-block text-dark text-center text-decoration-none
@@ -202,8 +117,28 @@
 import advertisementModal from '../components/AdvertisementModal.vue';
 
 export default {
+  data() {
+    return {
+      recommandedProductsId: ['-NLv7XDV7SGeJaegYizF', '-NLv715KqT0NKtudRi4H', '-NLv6lqylqkSJXmEknrw', '-NLv5eDLFEhzT-HdtKwu', '-NLv5rF7LD96Yh6Dkvcb', '-NLv6UA0Xvg4ct9RWnep'],
+      recommandedProducts: [],
+    };
+  },
+  methods: {
+    getrecommandedProducts(id) {
+      const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/product/${id}`;
+      this.axios.get(api).then((res) => {
+        this.recommandedProducts.push(res.data.product);
+      });
+    },
+  },
   components: {
     advertisementModal,
+  },
+  created() {
+    this.recommandedProductsId.forEach((item) => {
+      this.getrecommandedProducts(item);
+    });
+    console.log(this.recommandedProducts);
   },
 };
 </script>
