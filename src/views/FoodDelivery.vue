@@ -1,4 +1,5 @@
 <template>
+  <LoadingPage ref="loadingPage"></LoadingPage>
   <div class="container d-flex justify-content-center">
     <div class="w-75">
       <div class="border-bottom border-dark d-flex justify-content-center
@@ -207,6 +208,8 @@
   </div>
 </template>
 <script>
+import LoadingPage from './LoadingPage.vue';
+
 export default {
   data() {
     return {
@@ -227,6 +230,9 @@ export default {
         message: '',
       },
     };
+  },
+  components: {
+    LoadingPage,
   },
   methods: {
     // 取得預訂內容
@@ -258,6 +264,7 @@ export default {
         this.getCartContent();
       });
     },
+    // 加入外送費
     addDeliveryFee() {
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       const data = {
@@ -272,25 +279,45 @@ export default {
     },
     // 送出訂單
     confirmOrder() {
-      if (this.freeDelivery === false) {
-        this.addDeliveryFee();
-      }
-      const data = {
-        data: {
-          user: {
-            name: `${this.orderMessage.user.name}`,
-            email: `${this.orderDate}/${this.orderTime}`,
-            tel: `${this.orderMessage.user.tel}`,
-            address: '自取',
+      // 直接送出訂單
+      const sentOrder = () => {
+        const data = {
+          data: {
+            user: {
+              name: `${this.orderMessage.user.name}`,
+              email: `${this.orderDate}/${this.orderTime}`,
+              tel: `${this.orderMessage.user.tel}`,
+              address: `${this.orderMessage.user.address}`,
+            },
+            message: `${this.orderMessage.message}`,
           },
-          message: `${this.orderMessage.message}`,
-        },
+        };
+        const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/order`;
+        this.axios.post(api, data).then((res) => {
+          console.log(res);
+          this.$router.push(`/orderbuilt/${res.data.orderId}`);
+        });
       };
-      const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/order`;
-      this.axios.post(api, data).then((res) => {
-        console.log(res);
-        this.$router.push(`/orderbuilt/${res.data.orderId}`);
-      });
+      // 先加入外送費用再送出訂單
+      const addDeliveryFee = () => {
+        const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
+        const data = {
+          data: {
+            product_id: '-NMd3t-2VsCxZk837ShE',
+            qty: 1,
+          },
+        };
+        this.axios.post(api, data).then((res) => {
+          console.log(res);
+          sentOrder();
+        });
+      };
+      // 依是否需要外送費用送出訂單
+      if (this.freeDelivery === false) {
+        addDeliveryFee();
+      } else {
+        sentOrder();
+      }
     },
     // 表單驗證
     formValidation() {
@@ -315,7 +342,7 @@ export default {
       });
     },
   },
-  created() {
+  mounted() {
     // 取得未來五天的日期
     const today = new Date();
 

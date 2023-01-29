@@ -1,4 +1,5 @@
 <template>
+  <LoadingPage ref="loadingPage"></LoadingPage>
   <div class="container d-flex justify-content-center">
     <div class="w-75">
       <div class="border-bottom border-dark d-flex justify-content-center
@@ -187,6 +188,8 @@
 </template>
 
 <script>
+import LoadingPage from './LoadingPage.vue';
+
 export default {
   data() {
     return {
@@ -206,6 +209,9 @@ export default {
         message: '',
       },
     };
+  },
+  components: {
+    LoadingPage,
   },
   methods: {
     // 取得預訂內容

@@ -1,6 +1,6 @@
 <template>
-    <div id="loading" class="d-none"
-     style="width:100vw; height:100vh; z-index:100;">
+    <div id="loading" class="d-none top-0"
+     style="width:100vw; height:100vh; z-index:10000000;">
         <div class="position-fixed top-50 start-50 translate-middle">
             <div class="spinner-border text-white"
              style="width: 3rem; height: 3rem;" role="status"></div>

@@ -1,34 +1,67 @@
 <template>
-  <div class="modal modal-lg" tabindex="-1" id="orderModal">
+  <LoadingPage ref="loadingPage"></LoadingPage>
+  <div class="modal modal-lg" tabindex="-1" id="orderModal" style="z-index:10000;">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
           <div class="container w-75">
-            <div class="text-cented d-flex justify-content-between
-                         px-3 px-lg-5 py-3 align-items-center border-bottom border-dark">
-              <img src="../assets/images/LOGO/logo1.png" style="width:100px; height:100px"
-               alt="header-img">
-              <span class="fs-2 ms-5">預約外帶</span>
+            <!-- 標題 -->
+            <div class="border-bottom border-dark d-flex justify-content-center
+              align-items-center">
+              <div class="my-4 d-flex justify-content-between
+                align-items-center flex-column flex-md-row">
+                <img src="../assets/images/LOGO/logo1.png"
+                 style="width:100px; height:100px" alt="header-img"
+                  class="me-md-5">
+                <span class="fs-2 d-block mt-2">預定餐點</span>
+              </div>
             </div>
-            <div>
+            <!-- 如果沒有預定餐點顯示以下部分 -->
+            <div class="w-100 text-center" v-if="cartContent.total === 0">
+              <i class="bi bi-basket2-fill text-dark" style="font-size: 15rem;"></i>
+              <p class="fs-2">目前尚無預定餐點</p>
+              <router-link to="/productList" class="btn btn-lg btn-dark mt-3 mb-5"
+               @click="modalClose">
+                前往選購餐點
+              </router-link>
+            </div>
+            <!-- 如果有預訂餐點顯示以下部分 -->
+            <div v-if="cartContent.total !== 0">
               <!-- 預約餐點內容 -->
               <div class="border-bottom border-dark py-4">
                 <p class="fs-4">預約訂單內容</p>
                 <table class="table">
                   <thead>
                     <tr>
-                      <th scope="col">品項</th>
-                      <th scope="col">單價</th>
-                      <th scope="col">數量</th>
-                      <th scope="col">小計</th>
-                      <th scope="col"></th>
+                      <th class="col-4">品項</th>
+                      <th>單價</th>
+                      <th class="text-center">數量</th>
+                      <th>小計</th>
+                      <th class="col-1"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item) in cartContent.carts" :key="item.id">
+                    <tr v-for="(item, i) in cartContent.carts" :key="item.id">
                       <td>{{ item.product.title }}</td>
                       <td>{{ item.product.price }}</td>
-                      <td>{{ item.qty }}</td>
+                      <td class="text-center">
+                        <!-- 減少一個 -->
+                        <button type="button" class="btn btn-sm rounded-circle
+                         btn-outline-dark me-3 text-center p-0"
+                          @click="changeQty(item.id, i, item.qty-1)"
+                          style="width:30px; height:30px; line-height: 30px;">
+                          <i class="bi bi-dash-lg"></i>
+                        </button>
+                        <!-- 數量 -->
+                        {{ item.qty }}
+                        <!-- 增加一個 -->
+                        <button type="button" class="btn btn-sm rounded-circle
+                         btn-outline-dark ms-3 text-center p-0"
+                          @click="changeQty(item.id, i, item.qty+1)"
+                          style="width:30px; height:30px; line-height: 30px;">
+                          <i class="bi bi-plus-lg"></i>
+                        </button>
+                      </td>
                       <td>{{ item.total }}</td>
                       <td>
                         <button type="button" class="btn btn-otline-dark border-none"
@@ -38,11 +71,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>餐點價格：</td>
-                      <td>{{ cartContent.total }}</td>
+                      <td colspan="5" class="text-end w-100">餐點價格：{{ cartContent.total }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -57,7 +86,7 @@
                 </div>
                 <div class="col">
                   <button class="btn btn-lg btn-dark px-4 w-100" type="button"
-                   @click="changeToConfirmPage('fooddelivery')">
+                    @click="changeToConfirmPage('fooddelivery')">
                     外送到府
                   </button>
                 </div>
@@ -72,6 +101,7 @@
 
 <script>
 import Modal from 'bootstrap/js/dist/modal';
+import LoadingPage from '../views/LoadingPage.vue';
 
 export default {
   data() {
@@ -83,6 +113,7 @@ export default {
       typeOfOrder: '',
     };
   },
+  components: { LoadingPage },
   methods: {
     // 開啟Modal
     modalShow() {
@@ -94,16 +125,22 @@ export default {
     },
     // 取得預訂內容
     getCartContent() {
+      // 顯示載入中畫面
+      this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
         console.log(res);
         this.cartContent = res.data.data;
         console.log(this.cartContent);
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
+        // 移除載入中畫面
+        this.$refs.loadingPage.loadingPageHide();
       });
     },
     // 取消某一筆預定內容
     cancelCart(id) {
+      // 顯示載入中畫面
+      this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart/${id}`;
       this.axios.delete(api).then((res) => {
         console.log(res);
@@ -113,6 +150,29 @@ export default {
     changeToConfirmPage(destination) {
       this.modalClose();
       this.$router.push(`/${destination}`);
+    },
+    // 修改單一餐點的數量
+    changeQty(productId, productNum, newQty) {
+      if (newQty !== 0) {
+        // 顯示載入中畫面
+        this.$refs.loadingPage.loadingPageShow();
+        console.log('changeQty');
+        console.log(productId, productNum, newQty);
+        // 將資料寫回資料庫
+        const data = {
+          data: {
+            product_id: productId,
+            qty: newQty,
+          },
+        };
+        console.log(data);
+        const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart/${productId}`;
+        this.axios.put(api, data).then((res) => {
+          console.log(res);
+          // 重新取得資料
+          this.getCartContent();
+        });
+      }
     },
   },
   mounted() {

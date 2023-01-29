@@ -1,5 +1,8 @@
 <!-- eslint-disable vuejs-accessibility/anchor-has-content -->
 <template>
+  <LoadingPage ref="loadingPage"></LoadingPage>
+  <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
+  </messageToast>
   <div class="home">
     <!-- 廣告Modal -->
     <advertisementModal ref="advertisementModal"></advertisementModal>
@@ -96,12 +99,16 @@
               <h5 class="card-title">{{ item.title }}</h5>
               <p class="card-text">{{ item.price }}</p>
             </div>
-            <div class="d-flex" style="height:30px;">
-              <a class="d-block text-dark text-center text-decoration-none
-            border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-              <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
+            <div class="d-flex w-100" style="height:30px;">
+              <span class="d-block text-center text-decoration-none
+                border-end border-dark w-50 lh-lg link-hover"
+                 @click="turnToDetailPage(item.id)" @keyup="esc">
+                詳細資訊
+              </span>
+              <span class="d-block text-center text-decoration-none w-50 lh-lg link-hover"
+               @click="QuickAddToCart(item.id)" @keyup="plus">
                 預約外帶
-              </a>
+              </span>
             </div>
           </div>
         </div>
@@ -115,13 +122,19 @@
 
 <script>
 import advertisementModal from '../components/AdvertisementModal.vue';
+import LoadingPage from './LoadingPage.vue';
+import messageToast from '../components/MessageToast.vue';
 
 export default {
   data() {
     return {
       recommandedProductsId: ['-NLv7XDV7SGeJaegYizF', '-NLv715KqT0NKtudRi4H', '-NLv6lqylqkSJXmEknrw', '-NLv5eDLFEhzT-HdtKwu', '-NLv5rF7LD96Yh6Dkvcb', '-NLv6UA0Xvg4ct9RWnep'],
       recommandedProducts: [],
+      toastMessage: '餐點已加入預訂清單',
     };
+  },
+  components: {
+    advertisementModal, LoadingPage, messageToast,
   },
   methods: {
     getrecommandedProducts(id) {
@@ -130,9 +143,31 @@ export default {
         this.recommandedProducts.push(res.data.product);
       });
     },
-  },
-  components: {
-    advertisementModal,
+    QuickAddToCart(id) {
+      this.$refs.loadingPage.loadingPageShow();
+      const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
+      const data = {
+        data: {
+          product_id: `${id}`,
+          qty: 1,
+        },
+      };
+      this.axios.post(api, data).then((res) => {
+        this.$refs.loadingPage.loadingPageHide();
+        console.log(res);
+        if (res.data.success) {
+          this.toastMessage = '餐點已加入預訂清單';
+          this.$refs.messageToast.toastShow();
+        } else {
+          this.toastMessage = '餐點加入預訂清單失敗';
+          this.$refs.messageToast.toastShow();
+        }
+      });
+    },
+    // 切換到詳細產品資訊頁面
+    turnToDetailPage(id) {
+      this.$router.push(`/productDetail/${id}`);
+    },
   },
   created() {
     this.recommandedProductsId.forEach((item) => {

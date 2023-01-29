@@ -1,5 +1,7 @@
 <template>
   <LoadingPage ref="loadingPage"></LoadingPage>
+  <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
+  </messageToast>
   <div class="container my-4">
     <!-- 麵包屑 -->
     <p class="fw-bold">目前頁面：菜單介紹 / {{ productsDetail.title }}</p>
@@ -18,13 +20,13 @@
         <div class="d-flex justify-align-start align-items-center">
           <h4 class="fw-bold d-block" style="width:100px">數量</h4>
           <ul class="list-group list-group-horizontal w-100">
-            <li class="list-group-item" @click="changeQuantity('minus')" @keyup="minus">
+            <li class="list-group-item link-hover" @click="changeQuantity('minus')" @keyup="minus">
               <span>-</span>
             </li>
             <li class="list-group-item w-25 text-center">
               <span>{{ orderQuantity }}</span>
             </li>
-            <li class="list-group-item" @click="changeQuantity('plus')" @keyup="plus">
+            <li class="list-group-item link-hover" @click="changeQuantity('plus')" @keyup="plus">
               <span>+</span>
             </li>
           </ul>
@@ -56,11 +58,17 @@
               <p class="card-text">{{ item.price }}</p>
             </div>
             <div class="d-flex" style="height:30px;">
-              <a class="d-block text-dark text-center text-decoration-none
-            border-end border-dark w-50 lh-lg" href="#">詳細資訊</a>
-              <a class="d-block text-dark text-center text-decoration-none w-50 lh-lg" href="#">
-                預約外帶
-              </a>
+              <div class="d-flex w-100" style="height:30px;">
+                <span class="d-block border-end border-dark text-center text-decoration-none
+                 w-50 lh-lg link-hover"
+                 @click="turnToDetailPage(item.id)" @keyup="plus">
+                  詳細資訊
+                </span>
+                <span class="d-block text-center text-decoration-none w-50 lh-lg link-hover"
+                 @click="QuickAddToCart(item.id)" @keyup="plus">
+                  預約外帶
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -75,6 +83,7 @@
 
 <script>
 import LoadingPage from './LoadingPage.vue';
+import messageToast from '../components/MessageToast.vue';
 
 export default {
   data() {
@@ -83,20 +92,26 @@ export default {
       orderQuantity: 1,
       recommandedProductsId: ['-NLv3-t7xMq-IJo3w3U0', '-NLv5M6uQiOXcEsiLkIu', '-NLv092hsFRNH-Rfjeg2'],
       recommandedProducts: [],
+      toastMessage: '餐點已加入預訂清單',
     };
   },
   components: {
-    LoadingPage,
+    LoadingPage, messageToast,
   },
   methods: {
     // 取得產品資訊
     getProductDetail() {
+      // 顯示載入畫面
+      this.$refs.loadingPage.loadingPageShow();
+      // 取得資料
       const productId = this.$route.params.id;
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/product/${productId}`;
       this.axios.get(api).then((res) => {
         console.log(res);
         this.productsDetail = res.data.product;
         console.log(this.productsDetail);
+        // 移除載入畫面
+        this.$refs.loadingPage.loadingPageHide();
       });
     },
     getrecommandedProducts(id) {
@@ -126,9 +141,12 @@ export default {
         this.$refs.loadingPage.loadingPageHide();
       }, 1500);
     },
+    messageToastShow() {
+      this.$refs.messageToast.toastShow();
+    },
     // 新增至預訂清單
     addToCart() {
-      this.loading();
+      this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       const data = {
         data: {
@@ -137,11 +155,52 @@ export default {
         },
       };
       this.axios.post(api, data).then((res) => {
+        this.$refs.loadingPage.loadingPageHide();
+        if (res.data.success) {
+          this.toastMessage = '餐點已加入預訂清單';
+          this.$refs.messageToast.toastShow();
+        } else {
+          this.toastMessage = '餐點加入預訂清單失敗';
+          this.$refs.messageToast.toastShow();
+        }
+      });
+    },
+    // 快速加入1件商品到購物清單
+    QuickAddToCart(id) {
+      this.$refs.loadingPage.loadingPageShow();
+      const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
+      const data = {
+        data: {
+          product_id: `${id}`,
+          qty: 1,
+        },
+      };
+      this.axios.post(api, data).then((res) => {
+        this.$refs.loadingPage.loadingPageHide();
         console.log(res);
+        if (res.data.success) {
+          this.toastMessage = '餐點已加入預訂清單';
+          this.$refs.messageToast.toastShow();
+        } else {
+          this.toastMessage = '餐點加入預訂清單失敗';
+          this.$refs.messageToast.toastShow();
+        }
+      });
+    },
+    // 切換到詳細產品資訊頁面
+    turnToDetailPage(id) {
+      console.log(id);
+      this.$route.params.id = id;
+      // 重新取得產品資訊
+      this.getProductDetail();
+      // 重新取得推薦商品資訊
+      this.recommandedProducts = [];
+      this.recommandedProductsId.forEach((item) => {
+        this.getrecommandedProducts(item);
       });
     },
   },
-  created() {
+  mounted() {
     this.getProductDetail();
     this.recommandedProductsId.forEach((item) => {
       this.getrecommandedProducts(item);

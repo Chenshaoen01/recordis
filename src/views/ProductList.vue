@@ -1,6 +1,8 @@
 <!-- eslint-disable radix -->
 <template>
   <LoadingPage ref="loadingPage"></LoadingPage>
+  <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
+  </messageToast>
   <div class="container my-4">
     <!-- 麵包屑 -->
     <p class="ms-2 fw-bold">目前頁面：菜單介紹</p>
@@ -28,9 +30,10 @@
             <span class="d-block text-center text-decoration-none
               border-end border-dark w-50 lh-lg link-hover" @click="TurnToDetailPage(item.data.id)"
               @keyup="enter">詳細資訊</span>
-            <span class="d-block text-center text-decoration-none w-50 lh-lg link-hover">
-              預約外帶
-            </span>
+              <span class="d-block text-center text-decoration-none w-50 lh-lg link-hover"
+               @click="QuickAddToCart(item.data.id)" @keyup="plus">
+                預約外帶
+              </span>
           </div>
         </div>
       </div>
@@ -55,6 +58,7 @@
 
 <script>
 import LoadingPage from './LoadingPage.vue';
+import messageToast from '../components/MessageToast.vue';
 
 export default {
   data() {
@@ -65,10 +69,11 @@ export default {
       lastPage: 1,
       currentPage: 1,
       category: '全部',
+      toastMessage: '餐點已加入預訂清單',
     };
   },
   components: {
-    LoadingPage,
+    LoadingPage, messageToast,
   },
   methods: {
     // 取得商品列表資料
@@ -141,6 +146,27 @@ export default {
         this.$refs.loadingPage.loadingPageHide();
       }, 1500);
     },
+    QuickAddToCart(id) {
+      this.$refs.loadingPage.loadingPageShow();
+      const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
+      const data = {
+        data: {
+          product_id: `${id}`,
+          qty: 1,
+        },
+      };
+      this.axios.post(api, data).then((res) => {
+        this.$refs.loadingPage.loadingPageHide();
+        console.log(res);
+        if (res.data.success) {
+          this.toastMessage = '餐點已加入預訂清單';
+          this.$refs.messageToast.toastShow();
+        } else {
+          this.toastMessage = '餐點加入預訂清單失敗';
+          this.$refs.messageToast.toastShow();
+        }
+      });
+    },
   },
   watch: {
     currentPage() {
@@ -154,7 +180,6 @@ export default {
     this.getProductsListData();
   },
   mounted() {
-    this.loading();
   },
 };
 </script>
