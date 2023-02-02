@@ -15,34 +15,53 @@
      align-items-center" id="homepage-header-content">
       <img src="../assets/images/LOGO/logo2.png" style="width:300px; height:300px" alt="header-img">
       <div class="text-white mt-3">
-        <a href="#" class="text-white fs-4 text-decoration-none">關於我們</a>
+        <a href="/#/about" class="text-white fs-4 text-decoration-none">關於我們</a>
         <span class="mx-5 fs-4">X</span>
-        <a href="#" class="text-white fs-4 text-decoration-none">菜單介紹</a>
+        <a href="/#/productlist" class="text-white fs-4 text-decoration-none">菜單介紹</a>
         <span class="mx-5">X</span>
         <a href="#" class="text-white fs-4 text-decoration-none">預約外帶</a>
       </div>
     </div>
     <!-- 消費方式 -->
-    <div class="row p-5 mx-auto g-5 d-flex flex-column flex-md-row" style="max-width:800px;">
-      <div class="col">
-        <div class="border border-dark border-3 rounded-5 text-center p-5 link-hover"
-         style="height:350px">
-          <h2 class="w-75 fw-bold border-bottom border-dark border-3 mx-auto my-4 pb-3">預約外帶</h2>
-          <p class="fs-4 my-3">預約餐點</p>
-          <p class="fs-4 my-3">省時方便</p>
+    <div class="container mx-auto" style="max-width:800px;">
+      <p class="mx-auto text-center fs-2 fw-bold border border-dark"
+       style="width:300px; margin:80px 0 50px 0;">
+        消費方式
+      </p>
+      <div class="row row-cols-1 row-cols-md-3">
+        <div class="col">
+          <div class="d-flex flex-column
+           align-items-center text-center mx-2" style="height:350px">
+           <img src="../assets/images/others/eatin.png" alt=""
+           class="mb-4" style="height:150px">
+           <p class="fs-4 fw-bold">內用點餐</p>
+           <p class="fs-4">餐點新鮮出爐<br>絕佳美味饗宴</p>
+          </div>
         </div>
-      </div>
-      <div class="col">
-        <div class="border border-dark border-3 rounded-5 text-center p-5 link-hover"
-         style="height:350px">
-          <h2 class="w-75 fw-bold border-bottom border-dark border-3 mx-auto my-4 pb-3">外送到府</h2>
-          <p class="fs-4 my-3">餐點費用達300元可免費外送</p>
-          <p class="fs-6 my-3">(未達300元外送費用50元)</p>
+        <div class="col">
+          <div class="d-flex flex-column
+           align-items-center text-center mx-2" style="height:350px">
+           <img src="../assets/images/others/takeaway.png" alt=""
+           class="mb-4" style="height:150px">
+           <p class="fs-4 fw-bold">預約外帶</p>
+           <p class="fs-4">指定取餐時間<br>省時方便 </p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="d-flex flex-column
+           align-items-center text-center mx-2" style="height:350px">
+           <img src="../assets/images/others/fooddelivery.png" alt=""
+           class="mb-4" style="height:150px">
+           <p class="fs-4 fw-bold">外送到府</p>
+           <p class="fs-4">餐點費用達300元<br>可免費外送</p>
+           <p class="fs-6 mt-0">未達300元外送費用50元</p>
+          </div>
         </div>
       </div>
     </div>
     <!-- 品牌理念 -->
-    <div class="container mt-4 d-flex flex-column align-items-center justify-contnent-center">
+    <div class="container mt-4 d-flex flex-column align-items-center
+     justify-contnent-center" style="max-width:1000px;">
       <div id="introduction1"
       class="w-100 d-flex justify-content-center align-items-end">
         <div id="introduction1-box" class="position-relative mb-5 border border-dark border-2
@@ -89,7 +108,7 @@
       </div>
     </div>
     <!-- 餐點卡片 -->
-    <div class="container my-4">
+    <div class="container my-4" style="max-width:1000px;">
       <div class="row g-3 gx-xl-0 row-cols-2 row-cols-lg-3">
         <div class="col d-flex justify-content-center"
          v-for="(item) in recommandedProducts" :key="item.id">
@@ -133,6 +152,7 @@ export default {
       toastMessage: '餐點已加入預訂清單',
     };
   },
+  emits: ['updateQty'],
   components: {
     advertisementModal, LoadingPage, messageToast,
   },
@@ -154,6 +174,8 @@ export default {
       };
       this.axios.post(api, data).then((res) => {
         this.$refs.loadingPage.loadingPageHide();
+        // 更新 NavBar 的產品數量
+        this.$emit('updateQty');
         console.log(res);
         if (res.data.success) {
           this.toastMessage = '餐點已加入預訂清單';

@@ -3,7 +3,7 @@
   <LoadingPage ref="loadingPage"></LoadingPage>
   <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
   </messageToast>
-  <div class="container my-4">
+  <div class="container my-4" style="max-width:1000px;">
     <!-- 麵包屑 -->
     <p class="ms-2 fw-bold">目前頁面：菜單介紹</p>
     <!-- 餐點種類篩選 -->
@@ -75,9 +75,11 @@ export default {
   components: {
     LoadingPage, messageToast,
   },
+  emits: ['updateQty'],
   methods: {
     // 取得商品列表資料
     getProductsListData() {
+      this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/products/all`;
       this.axios.get(api).then((res) => {
         console.log(res);
@@ -116,8 +118,9 @@ export default {
                 productsEdited.push(dataPushed);
               }
             }
-            console.log('test');
+            console.log(productsEdited);
           }
+          this.$refs.loadingPage.loadingPageHide();
         });
         // 將編輯完的結果寫回資料庫
         this.productsShown = productsEdited;
@@ -139,13 +142,6 @@ export default {
     TurnToDetailPage(id) {
       this.$router.push(`/productDetail/${id}`);
     },
-    // 載入中畫面
-    loading() {
-      this.$refs.loadingPage.loadingPageShow();
-      setTimeout(() => {
-        this.$refs.loadingPage.loadingPageHide();
-      }, 1500);
-    },
     QuickAddToCart(id) {
       this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
@@ -157,6 +153,8 @@ export default {
       };
       this.axios.post(api, data).then((res) => {
         this.$refs.loadingPage.loadingPageHide();
+        // 更新 NavBar 的產品數量
+        this.$emit('updateQty');
         console.log(res);
         if (res.data.success) {
           this.toastMessage = '餐點已加入預訂清單';
@@ -176,10 +174,8 @@ export default {
       this.getProductsListData();
     },
   },
-  created() {
-    this.getProductsListData();
-  },
   mounted() {
+    this.getProductsListData();
   },
 };
 </script>

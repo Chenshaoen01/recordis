@@ -98,6 +98,7 @@ export default {
   components: {
     LoadingPage, messageToast,
   },
+  emits: ['updateQty'],
   methods: {
     // 取得產品資訊
     getProductDetail() {
@@ -146,6 +147,7 @@ export default {
     },
     // 新增至預訂清單
     addToCart() {
+      console.log(this.$refs);
       this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       const data = {
@@ -156,6 +158,9 @@ export default {
       };
       this.axios.post(api, data).then((res) => {
         this.$refs.loadingPage.loadingPageHide();
+        // 更新 NavBar 的產品數量
+        this.$emit('updateQty');
+
         if (res.data.success) {
           this.toastMessage = '餐點已加入預訂清單';
           this.$refs.messageToast.toastShow();
@@ -177,6 +182,7 @@ export default {
       };
       this.axios.post(api, data).then((res) => {
         this.$refs.loadingPage.loadingPageHide();
+        this.$emit('updateQty');
         console.log(res);
         if (res.data.success) {
           this.toastMessage = '餐點已加入預訂清單';

@@ -111,9 +111,11 @@ export default {
       couponCode: '',
       cartContent: {},
       typeOfOrder: '',
+      amoutOfOrders: 0,
     };
   },
   components: { LoadingPage },
+  emits: ['updateAmoutOfOrders'],
   methods: {
     // 開啟Modal
     modalShow() {
@@ -126,7 +128,7 @@ export default {
     // 取得預訂內容
     getCartContent() {
       // 顯示載入中畫面
-      this.$refs.loadingPage.loadingPageShow();
+      // this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
         console.log(res);
@@ -135,6 +137,9 @@ export default {
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
         // 移除載入中畫面
         this.$refs.loadingPage.loadingPageHide();
+        // 更新NavBar顯示的數量
+        this.amoutOfOrders = this.cartContent.carts.length;
+        this.$emit('updateAmoutOfOrders', this.amoutOfOrders);
       });
     },
     // 取消某一筆預定內容
@@ -177,14 +182,7 @@ export default {
   },
   mounted() {
     this.modal = new Modal('#orderModal');
-    const today = new Date();
-
-    for (let n = 1; n <= 5; n += 1) {
-      const tomorrow = new Date();
-      tomorrow.setTime(today.getTime() + 1000 * 60 * 60 * 24 * (n - 1));
-      const nextDate = `${tomorrow.getMonth() + 1} / ${tomorrow.getDate()}`;
-      this.date.push(nextDate);
-    }
+    this.getCartContent();
   },
 };
 </script>

@@ -126,37 +126,27 @@
               </div>
             </div>
             <div class="mt-4">
-              <select class="form-select shadow-none"
-               aria-label="Default select example" v-model="orderTime" required>
-                <option disabled selected value="">請選擇外送時段</option>
-                <option value="1100-1115">11:00 ~ 11:15</option>
-                <option value="1100-1115">11:15 ~ 11:30</option>
-                <option value="1100-1115">11:30 ~ 11:45</option>
-                <option value="1100-1115">11:45 ~ 12:00</option>
-                <option value="1100-1115">12:00 ~ 12:15</option>
-                <option value="1100-1115">12:15 ~ 12:30</option>
-                <option value="1100-1115">12:30 ~ 12:45</option>
-                <option value="1100-1115">12:45 ~ 13:00</option>
-                <option value="1100-1115">13:00 ~ 13:15</option>
-                <option value="1100-1115">13:15 ~ 13:30</option>
-                <option value="1100-1115">13:30 ~ 13:45</option>
-                <option value="1100-1115">13:45 ~ 14:00</option>
-                <option value="1100-1115" disabled>14:00 ~ 17:00未營業</option>
-                <option value="1100-1115">17:00 ~ 17:15</option>
-                <option value="1100-1115">17:15 ~ 17:30</option>
-                <option value="1100-1115">17:30 ~ 17:45</option>
-                <option value="1100-1115">17:45 ~ 18:00</option>
-                <option value="1100-1115">18:00 ~ 18:15</option>
-                <option value="1100-1115">18:15 ~ 18:30</option>
-                <option value="1100-1115">18:30 ~ 18:45</option>
-                <option value="1100-1115">18:45 ~ 19:00</option>
-                <option value="1100-1115">19:00 ~ 19:15</option>
-                <option value="1100-1115">19:15 ~ 19:30</option>
-                <option value="1100-1115">19:30 ~ 19:45</option>
-                <option value="1100-1115">19:45 ~ 20:00</option>
+              <select class="form-select shadow-none" aria-label="Default select example"
+               v-model="orderTime" required v-if="firstDate === orderDate">
+                <option disabled selected value="">請選擇取餐時段</option>
+                <option v-for="(item) in timeOptionFirstDay" :key="item.option" :value="item.option"
+                 :disabled="item.passed">
+                  {{ item.option }}
+                </option>
               </select>
               <div class="invalid-feedback">
-                請選擇外送時間
+                 請選擇取餐時間
+              </div>
+              <select class="form-select shadow-none" aria-label="Default select example"
+               v-model="orderTime" required v-if="firstDate !== orderDate">
+                <option disabled selected value="">請選擇取餐時段</option>
+                <option v-for="(item) in timeOptionOtherDay" :key="item.option" :value="item.option"
+                 :disabled="item.passed">
+                  {{ item.option }}
+                </option>
+              </select>
+              <div class="invalid-feedback">
+                 請選擇取餐時間
               </div>
             </div>
           </div>
@@ -229,6 +219,67 @@ export default {
         },
         message: '',
       },
+      firstDate: '',
+      timeOptionFirstDay: [
+        { option: '11:01 ~ 11:15', passed: false },
+        { option: '11:16 ~ 11:30', passed: false },
+        { option: '11:31 ~ 11:45', passed: false },
+        { option: '11:46 ~ 12:00', passed: false },
+        { option: '12:01 ~ 12:15', passed: false },
+        { option: '12:16 ~ 12:30', passed: false },
+        { option: '12:31 ~ 12:45', passed: false },
+        { option: '12:46 ~ 13:00', passed: false },
+        { option: '13:01 ~ 13:15', passed: false },
+        { option: '13:16 ~ 13:30', passed: false },
+        { option: '13:31 ~ 13:45', passed: false },
+        { option: '13:46 ~ 14:00', passed: false },
+        { option: '17:01 ~ 17:15', passed: false },
+        { option: '17:16 ~ 17:30', passed: false },
+        { option: '17:31 ~ 17:45', passed: false },
+        { option: '17:46 ~ 18:00', passed: false },
+        { option: '18:01 ~ 18:15', passed: false },
+        { option: '18:16 ~ 18:30', passed: false },
+        { option: '18:31 ~ 18:45', passed: false },
+        { option: '18:46 ~ 19:00', passed: false },
+        { option: '19:01 ~ 19:15', passed: false },
+        { option: '19:16 ~ 19:30', passed: false },
+        { option: '19:31 ~ 19:45', passed: false },
+        { option: '19:46 ~ 20:00', passed: false },
+        { option: '20:01 ~ 20:15', passed: false },
+        { option: '20:16 ~ 20:30', passed: false },
+        { option: '20:31 ~ 20:45', passed: false },
+        { option: '20:46 ~ 21:00', passed: false },
+      ],
+      timeOptionOtherDay: [
+        { option: '11:01 ~ 11:15', passed: false },
+        { option: '11:16 ~ 11:30', passed: false },
+        { option: '11:31 ~ 11:45', passed: false },
+        { option: '11:46 ~ 12:00', passed: false },
+        { option: '12:01 ~ 12:15', passed: false },
+        { option: '12:16 ~ 12:30', passed: false },
+        { option: '12:31 ~ 12:45', passed: false },
+        { option: '12:46 ~ 13:00', passed: false },
+        { option: '13:01 ~ 13:15', passed: false },
+        { option: '13:16 ~ 13:30', passed: false },
+        { option: '13:31 ~ 13:45', passed: false },
+        { option: '13:46 ~ 14:00', passed: false },
+        { option: '17:01 ~ 17:15', passed: false },
+        { option: '17:16 ~ 17:30', passed: false },
+        { option: '17:31 ~ 17:45', passed: false },
+        { option: '17:46 ~ 18:00', passed: false },
+        { option: '18:01 ~ 18:15', passed: false },
+        { option: '18:16 ~ 18:30', passed: false },
+        { option: '18:31 ~ 18:45', passed: false },
+        { option: '18:46 ~ 19:00', passed: false },
+        { option: '19:01 ~ 19:15', passed: false },
+        { option: '19:16 ~ 19:30', passed: false },
+        { option: '19:31 ~ 19:45', passed: false },
+        { option: '19:46 ~ 20:00', passed: false },
+        { option: '20:01 ~ 20:15', passed: false },
+        { option: '20:16 ~ 20:30', passed: false },
+        { option: '20:31 ~ 20:45', passed: false },
+        { option: '20:46 ~ 21:00', passed: false },
+      ],
     };
   },
   components: {
@@ -237,6 +288,7 @@ export default {
   methods: {
     // 取得預訂內容
     getCartContent() {
+      this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
         console.log(res);
@@ -249,10 +301,12 @@ export default {
         } else {
           this.freeDelivery = false;
         }
+        this.$refs.loadingPage.loadingPageHide();
       });
     },
     // 套用優惠券
     coupon() {
+      this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/coupon`;
       const data = {
         data: {
@@ -262,6 +316,7 @@ export default {
       this.axios.post(api, data).then((res) => {
         console.log(res);
         this.getCartContent();
+        this.$refs.loadingPage.loadingPageHide();
       });
     },
     // 加入外送費
@@ -349,10 +404,35 @@ export default {
     for (let n = 1; n <= 5; n += 1) {
       const tomorrow = new Date();
       tomorrow.setTime(today.getTime() + 1000 * 60 * 60 * 24 * (n - 1));
-      const nextDate = `${tomorrow.getMonth() + 1} / ${tomorrow.getDate()}`;
+      // 產生往後五天的日期陣列
+      const nextDate = `${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`;
       this.date.push(nextDate);
       if (n === 1) {
-        this.orderDate = `${tomorrow.getMonth() + 1} / ${tomorrow.getDate()}`;
+        // 預設取餐日期為今天
+        this.orderDate = `${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`;
+        // 存取今天的日期
+        this.firstDate = `${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`;
+      }
+    }
+
+    const firstMinuteToday = new Date();
+    firstMinuteToday.setTime(today.getTime());
+    firstMinuteToday.setHours(11);
+    firstMinuteToday.setMinutes(0);
+    firstMinuteToday.setSeconds(0);
+
+    const timeCount = Math.floor((today.getTime() - firstMinuteToday.getTime()) / (1000 * 60 * 15));
+    console.log(timeCount);
+
+    if (timeCount >= 0) {
+      for (let m = 1; m <= timeCount; m += 1) {
+        if (m <= 16) {
+          this.timeOptionFirstDay[m - 1].passed = true;
+          console.log(this.timeOptionFirstDay[m - 1]);
+        } else if (m >= 29 && m <= 40) {
+          this.timeOptionFirstDay[m - 13].passed = true;
+          console.log(this.timeOptionFirstDay[m - 13]);
+        }
       }
     }
 

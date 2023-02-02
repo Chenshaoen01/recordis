@@ -25,9 +25,13 @@
             <router-link to="/productList" class="nav-link text-white me-3">菜單介紹</router-link>
           </li>
           <li class="nav-item d-flex align-items-center">
-            <button class="btn bg-none border-none nav-link text-white me-3 fs-4" href=""
-             @click="openOrderModal" @keypress="enter">
+            <button class="btn bg-none border-none nav-link text-white me-3 fs-4 position-relative"
+             href="" @click="openOrderModal" @keypress="enter">
               <i class="bi bi-bag-heart"></i>
+              <span class="position-absolute px-1 start-100 translate-middle
+               rounded-pill bg-danger fs-6" style="top:10px; min-width:25px;">
+                {{this.amoutOfOrders}}
+              </span>
             </button>
           </li>
           <li class="nav-item d-flex align-items-center">
@@ -39,9 +43,9 @@
       </div>
     </div>
   </nav>
-  <router-view/>
+  <router-view @updateQty="updateOrderQty"/>
   <!-- 預約外帶 Modal -->
-  <orderModal ref="orderModal"></orderModal>
+  <orderModal ref="orderModal" @updateAmoutOfOrders="countAmoutOfOrders"></orderModal>
   <!-- footer -->
   <div class="bg-dark pt-5" style="width:100%;">
     <div class="w-75 mx-auto d-flex flex-column flex-md-row
@@ -85,6 +89,11 @@
 import orderModal from './components/OrderModal.vue';
 
 export default {
+  data() {
+    return {
+      amoutOfOrders: 0,
+    };
+  },
   components: {
     orderModal,
   },
@@ -102,6 +111,13 @@ export default {
     scroll() {
       const navBar = document.getElementById('navBar');
       console.log(navBar);
+    },
+    countAmoutOfOrders(amout) {
+      this.amoutOfOrders = amout;
+    },
+    updateOrderQty() {
+      console.log('updateOrderQty');
+      this.$refs.orderModal.getCartContent();
     },
   },
   created() {

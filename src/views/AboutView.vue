@@ -1,6 +1,6 @@
 <template>
   <LoadingPage ref="loadingPage"></LoadingPage>
-  <div class="container">
+  <div class="container" style="max-width:1000px;">
     <!-- 上半 -->
     <div class="row mt-5 mb-3">
       <!-- 左邊 -->
