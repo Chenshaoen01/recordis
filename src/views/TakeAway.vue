@@ -330,6 +330,12 @@ export default {
       });
     },
   },
+  created() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  },
   mounted() {
     // 取得未來五天的日期
     const today = new Date();
@@ -358,9 +364,9 @@ export default {
     const timeCount = Math.floor((today.getTime() - firstMinuteToday.getTime()) / (1000 * 60 * 15));
 
     for (let m = 1; m <= timeCount; m += 1) {
-      if (m <= 16) {
+      if (m <= 12) {
         this.timeOptionFirstDay[m - 1].passed = true;
-        console.log(this.timeOptionFirstDay[m - 1]);
+        console.log(m, this.timeOptionFirstDay[m - 1]);
       } else if (m >= 29 && m <= 40) {
         this.timeOptionFirstDay[m - 13].passed = true;
         console.log(this.timeOptionFirstDay[m - 13]);

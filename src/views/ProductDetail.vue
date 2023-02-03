@@ -5,13 +5,14 @@
   <div class="container my-4">
     <!-- 麵包屑 -->
     <p class="fw-bold">目前頁面：菜單介紹 / {{ productsDetail.title }}</p>
+    <!-- 產品詳細資訊 -->
     <div class="d-flex flex-column flex-md-row">
       <!-- 圖片 -->
-      <div class="mb-3 me-md-4" style="width:500px;">
+      <div class="mb-3 me-md-4" style="width:500px;" data-aos="fade-right" data-aos-duration="1000">
         <img :src="productsDetail.imageUrl" class="w-100" alt="">
       </div>
       <!-- 餐點資訊 -->
-      <div>
+      <div data-aos="fade-right" data-aos-duration="1000">
         <h1 class="fw-bold">{{ productsDetail.title }}</h1>
         <h3 class="fw-bold mb-4">{{ productsDetail.price }}</h3>
         <p class="fw-bold fs-5 mb-4">{{ productsDetail.description }}</p>
@@ -82,6 +83,7 @@
 </template>
 
 <script>
+import AOS from 'aos';
 import LoadingPage from './LoadingPage.vue';
 import messageToast from '../components/MessageToast.vue';
 
@@ -206,12 +208,20 @@ export default {
       });
     },
   },
+  created() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  },
   mounted() {
     this.getProductDetail();
     this.recommandedProductsId.forEach((item) => {
       this.getrecommandedProducts(item);
     });
     console.log(this.recommandedProducts);
+
+    AOS.init();
   },
 };
 </script>

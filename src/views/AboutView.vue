@@ -4,8 +4,11 @@
     <!-- 上半 -->
     <div class="row mt-5 mb-3">
       <!-- 左邊 -->
-      <div class="col">
-         <div class="w-100 bg-light mb-3" style="height:450px;" id="aboutUsImg1">1</div>
+      <div class="col" data-aos="fade-down" data-aos-duration="1000">
+         <!-- 左上 -->
+         <div class="w-100 bg-light mb-3" style="height:450px;"
+          id="aboutUsImg1"></div>
+         <!-- 左下 -->
          <div class="w-100 border border-2 border-dark mb-3 d-flex flex-column
           justify-content-center align-items-center" style="height: 300px;">
           <h2 class="fw-bold mb-5">有機栽種安全衛生</h2>
@@ -16,17 +19,22 @@
       </div>
       <!-- 右邊 -->
       <div class="col">
+          <!-- 右上 -->
          <div class="w-100 border border-2 border-dark mb-3 d-flex flex-column
-          justify-content-center align-items-center" style="height: 300px;">
+          justify-content-center align-items-center"
+           data-aos="fade-left" data-aos-duration="1000"
+            style="height: 300px;">
             <h2 class="fw-bold mb-5">手工麵條口感獨特</h2>
             <p class="fw-bold">麵條每日手工製造</p>
             <p class="fw-bold">獨特的口感令人難忘</p>
          </div>
-         <div class="w-100 bg-light mb-3" style="height: 450px;" id="aboutUsImg2">4</div>
+         <!-- 右下 -->
+         <div class="w-100 bg-light mb-3" style="height: 450px;"
+          id="aboutUsImg2" data-aos="fade-up" data-aos-duration="1000"></div>
       </div>
     </div>
     <!-- 下半 -->
-    <div class="mb-5">
+    <div class="mb-5" data-aos="fade-left" data-aos-once="true" data-aos-duration="1000">
       <div class="bg-danger w-100 mb-3" style="height:250px" id="aboutUsImg3"></div>
       <div class="w-100 border border-2 border-dark mb-3 d-flex flex-column
           justify-content-center align-items-center" style="height:550px">
@@ -43,6 +51,7 @@
 </template>
 
 <script>
+import AOS from 'aos';
 import LoadingPage from './LoadingPage.vue';
 
 export default {
@@ -55,16 +64,13 @@ export default {
     LoadingPage,
   },
   methods: {
-    // 載入中畫面
-    loading() {
-      this.$refs.loadingPage.loadingPageShow();
-      setTimeout(() => {
-        this.$refs.loadingPage.loadingPageHide();
-      }, 1500);
-    },
   },
-  mounted() {
-    this.loading();
+  created() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+    AOS.init();
   },
 };
 </script>

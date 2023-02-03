@@ -5,10 +5,13 @@
   </messageToast>
   <div class="container my-4" style="max-width:1000px;">
     <!-- 麵包屑 -->
-    <p class="ms-2 fw-bold">目前頁面：菜單介紹</p>
+    <p class="ms-2 fw-bold" data-aos="fade-right" data-aos-once="true" data-aos-duration="1000">
+      目前頁面：菜單介紹
+    </p>
     <!-- 餐點種類篩選 -->
     <select class="ms-2 form-select my-3 shadow-none border-dark" style="width:300px"
-      aria-label="Default select example" @change="categoryFilter" v-model="category">
+      aria-label="Default select example" @change="categoryFilter" v-model="category"
+      data-aos="fade-right" data-aos-once="true" data-aos-duration="1000">
       <option class="selected">全部</option>
       <option value="義大利麵">義大利麵</option>
       <option value="披薩">披薩</option>
@@ -17,11 +20,14 @@
       <option value="飲品">飲品</option>
     </select>
     <!-- 餐點卡片 -->
-    <div class="row gy-5 gx-xl-0 row-cols-2 row-cols-lg-3">
+    <div class="row gy-5 gx-xl-0 row-cols-2 row-cols-lg-3"
+    data-aos="fade-right" data-aos-once="true" data-aos-duration="1000">
       <div class="col d-flex justify-content-center" v-for="(item) in
        productsShown" :key="item.id">
-        <div class="card border-dark" style="width: 18rem;">
-          <img :src="item.data.imageUrl" class="card-img-top" alt="...">
+        <div class="card border-dark img-expand" style="width: 18rem;">
+          <div class="card-img-top w-100 overflow-hidden">
+            <img :src="item.data.imageUrl" class="w-100" alt="...">
+          </div>
           <div class="card-body border-bottom border-dark">
             <h5 class="card-title">{{ item.data.title }}</h5>
             <p class="card-text">{{ item.data.price }}</p>
@@ -57,6 +63,7 @@
 </template>
 
 <script>
+import AOS from 'aos';
 import LoadingPage from './LoadingPage.vue';
 import messageToast from '../components/MessageToast.vue';
 
@@ -174,8 +181,15 @@ export default {
       this.getProductsListData();
     },
   },
+  created() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  },
   mounted() {
     this.getProductsListData();
+    AOS.init();
   },
 };
 </script>

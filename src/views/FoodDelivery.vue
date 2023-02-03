@@ -397,6 +397,12 @@ export default {
       });
     },
   },
+  created() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  },
   mounted() {
     // 取得未來五天的日期
     const today = new Date();
@@ -426,7 +432,7 @@ export default {
 
     if (timeCount >= 0) {
       for (let m = 1; m <= timeCount; m += 1) {
-        if (m <= 16) {
+        if (m <= 12) {
           this.timeOptionFirstDay[m - 1].passed = true;
           console.log(this.timeOptionFirstDay[m - 1]);
         } else if (m >= 29 && m <= 40) {

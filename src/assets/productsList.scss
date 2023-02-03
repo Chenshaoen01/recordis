@@ -6,3 +6,11 @@
     color: white;
     cursor: pointer;
 }
+
+// 
+.img-expand img{
+    transition: all, 1s;
+}
+.img-expand:hover img{
+    transform: scale(1.3);
+}

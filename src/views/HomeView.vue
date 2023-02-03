@@ -19,26 +19,26 @@
         <span class="mx-5 fs-4">X</span>
         <a href="/#/productlist" class="text-white fs-4 text-decoration-none">菜單介紹</a>
         <span class="mx-5">X</span>
-        <a href="#" class="text-white fs-4 text-decoration-none">預約外帶</a>
+        <a href="#" class="text-white fs-4 text-decoration-none">查看預約清單</a>
       </div>
     </div>
     <!-- 消費方式 -->
     <div class="container mx-auto" style="max-width:800px;">
       <p class="mx-auto text-center fs-2 fw-bold border border-dark"
-       style="width:300px; margin:80px 0 50px 0;">
+       style="width:300px; margin:80px 0 100px 0;">
         消費方式
       </p>
       <div class="row row-cols-1 row-cols-md-3">
-        <div class="col">
+        <div class="col expand-target">
           <div class="d-flex flex-column
            align-items-center text-center mx-2" style="height:350px">
            <img src="../assets/images/others/eatin.png" alt=""
            class="mb-4" style="height:150px">
-           <p class="fs-4 fw-bold">內用點餐</p>
+           <p class="fs-5 fw-bold">內用點餐</p>
            <p class="fs-4">餐點新鮮出爐<br>絕佳美味饗宴</p>
           </div>
         </div>
-        <div class="col">
+        <div class="col expand-target">
           <div class="d-flex flex-column
            align-items-center text-center mx-2" style="height:350px">
            <img src="../assets/images/others/takeaway.png" alt=""
@@ -47,7 +47,7 @@
            <p class="fs-4">指定取餐時間<br>省時方便 </p>
           </div>
         </div>
-        <div class="col">
+        <div class="col expand-target">
           <div class="d-flex flex-column
            align-items-center text-center mx-2" style="height:350px">
            <img src="../assets/images/others/fooddelivery.png" alt=""
@@ -62,7 +62,7 @@
     <!-- 品牌理念 -->
     <div class="container mt-4 d-flex flex-column align-items-center
      justify-contnent-center" style="max-width:1000px;">
-      <div id="introduction1"
+      <div id="introduction1" data-aos="fade-right" data-aos-duration="2000"
       class="w-100 d-flex justify-content-center align-items-end">
         <div id="introduction1-box" class="position-relative mb-5 border border-dark border-2
          d-flex justify-content-lg-end  justify-content-center align-items-end">
@@ -75,7 +75,7 @@
           </div>
         </div>
       </div>
-      <div id="introduction2"
+      <div id="introduction2" data-aos="fade-left" data-aos-duration="2000"
       class="w-100 d-flex justify-content-center align-items-end">
         <div id="introduction2-box" class="position-relative mb-5 border border-dark border-2
          d-flex justify-content-lg-start justify-content-center align-items-end">
@@ -93,12 +93,12 @@
           </div>
         </div>
       </div>
-      <button type="button" class="mb-5 mx-auto btn btn-dark" style="width:150px;">
-          查看品牌理念
-      </button>
+      <router-link to="/about" type="button" class="mb-5 mx-auto btn btn-dark" style="width:150px;">
+        查看品牌理念
+      </router-link>
     </div>
     <!-- 推薦餐點 -->
-    <div>
+    <div data-aos="zoom-in" data-aos-duration="1000">
       <div class="position-relative" style="height:50px;">
         <div class="bg-dark position-absolute top-50" style="width:100%; height:1px"></div>
         <span class="bg-white position-absolute start-50 top-50 translate-middle
@@ -108,7 +108,8 @@
       </div>
     </div>
     <!-- 餐點卡片 -->
-    <div class="container my-4" style="max-width:1000px;">
+    <div class="container my-4" style="max-width:1000px;"
+     data-aos="fade-right" data-aos-duration="1000">
       <div class="row g-3 gx-xl-0 row-cols-2 row-cols-lg-3">
         <div class="col d-flex justify-content-center"
          v-for="(item) in recommandedProducts" :key="item.id">
@@ -131,15 +132,17 @@
             </div>
           </div>
         </div>
-        <button type="button" class="mt-5 mb-3 mx-auto btn btn-dark" style="width:150px;">
-          查看所有餐點
-        </button>
+        <router-link to="/productList" type="button"
+         class="my-5 mx-auto btn btn-dark" style="width:150px;">
+        查看所有餐點
+      </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import AOS from 'aos';
 import advertisementModal from '../components/AdvertisementModal.vue';
 import LoadingPage from './LoadingPage.vue';
 import messageToast from '../components/MessageToast.vue';
@@ -150,6 +153,7 @@ export default {
       recommandedProductsId: ['-NLv7XDV7SGeJaegYizF', '-NLv715KqT0NKtudRi4H', '-NLv6lqylqkSJXmEknrw', '-NLv5eDLFEhzT-HdtKwu', '-NLv5rF7LD96Yh6Dkvcb', '-NLv6UA0Xvg4ct9RWnep'],
       recommandedProducts: [],
       toastMessage: '餐點已加入預訂清單',
+      expandedNum: 0,
     };
   },
   emits: ['updateQty'],
@@ -190,12 +194,47 @@ export default {
     turnToDetailPage(id) {
       this.$router.push(`/productDetail/${id}`);
     },
+    // 消費方式特效
+    expand() {
+      const expandTargets = document.getElementsByClassName('expand-target');
+      const expandTargetCopy = [...expandTargets];
+      expandTargetCopy.forEach((item, i) => {
+        item.classList.remove('expanded');
+        if (i + 1 === this.expandedNum) {
+          item.classList.add('expanded');
+        }
+      });
+    },
   },
   created() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+
     this.recommandedProductsId.forEach((item) => {
       this.getrecommandedProducts(item);
     });
     console.log(this.recommandedProducts);
+
+    AOS.init();
+  },
+  watch: {
+    expandedNum() {
+      this.expand();
+    },
+  },
+  mounted() {
+    this.expandedNum += 1;
+
+    // 每3秒換一次 expandedNum
+    setInterval(() => {
+      if (this.expandedNum <= 2) {
+        this.expandedNum += 1;
+      } else if (this.expandedNum === 3) {
+        this.expandedNum = 1;
+      }
+    }, 3000);
   },
 };
 </script>

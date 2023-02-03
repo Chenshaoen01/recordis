@@ -1,7 +1,7 @@
 <template>
     <div class="toast position-fixed end-0 shadow-none" role="alert"
-     aria-live="assertive" aria-atomic="true" style="top: 80px">
-        <div class="toast-body bg-white text-dark border-dark">
+     aria-live="assertive" aria-atomic="true" style="top: 90px">
+        <div class="toast-body bg-dark text-white">
            {{ messageReceived }}
         </div>
     </div>

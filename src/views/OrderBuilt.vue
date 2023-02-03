@@ -45,7 +45,7 @@
           <tbody>
             <tr>
               <th class="text-center col-6">餐點名稱</th>
-              <th class="text-center col-6">金額</th>
+              <th class="text-center col-6">金額(含折扣金額)</th>
             </tr>
             <tr v-for="(item) in order.products" :key="item.id">
               <td class="col text-center col-6">{{ item.product.title }}</td>
@@ -114,6 +114,12 @@ export default {
         this.$refs.loadingPage.loadingPageHide();
       });
     },
+  },
+  created() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   },
   mounted() {
     this.getSingleOrder();
