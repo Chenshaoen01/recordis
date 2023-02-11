@@ -1,16 +1,19 @@
 <template>
+  <SpinnerLoadingPage ref="spinnerLoadingPage"></SpinnerLoadingPage>
   <LoadingPage ref="loadingPage"></LoadingPage>
   <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
   </messageToast>
   <div class="container my-4">
     <!-- 麵包屑 -->
-    <p class="fw-bold">目前頁面：菜單介紹 / {{ productsDetail.title }}</p>
+    <p class="fw-bold mx-auto"
+     style="max-width:800px">目前頁面：菜單介紹 / {{ productsDetail.title }}</p>
     <!-- 產品詳細資訊 -->
-    <div class="d-flex flex-column flex-md-row">
+    <div class="d-flex flex-column flex-md-row mx-auto align-items-start"
+     style="max-width:800px">
       <!-- 圖片 -->
-      <div class="mb-3 me-md-4" style="width:500px;" data-aos="fade-right" data-aos-duration="1000">
-        <img :src="productsDetail.imageUrl" class="w-100" alt="">
-      </div>
+      <img :src="productsDetail.imageUrl" class="mb-3 me-md-4" alt=""
+      data-aos="fade-right" data-aos-duration="1000"
+      id="productDetailImg">
       <!-- 餐點資訊 -->
       <div data-aos="fade-right" data-aos-duration="1000">
         <h1 class="fw-bold">{{ productsDetail.title }}</h1>
@@ -40,7 +43,8 @@
     </div>
   </div>
   <!-- 分隔線 -->
-  <div class="position-relative" style="height:50px;">
+  <div class="position-relative" style="height:50px;"
+  data-aos="zoom-in" data-aos-duration="1000">
     <div class="bg-dark position-absolute top-50" style="width:100%; height:1px"></div>
     <span class="bg-white position-absolute start-50 top-50 translate-middle
          fw-bolder fs-4 text-dark text-center mx-auto px-3">
@@ -48,9 +52,10 @@
     </span>
   </div>
   <!-- 推薦餐點 -->
-  <div class="container my-4">
-    <div class="row g-3 row-cols-1 row-cols-md-3">
-      <div class="col d-flex justify-content-center"
+  <div class="container my-4" style="max-width:1000px;"
+   data-aos="fade-right" data-aos-duration="1000">
+    <div class="row g-3 row-cols-1 row-cols-sm-3">
+      <div class="col d-flex justify-content-center card-expand"
          v-for="(item) in recommandedProducts" :key="item.id">
           <div class="card border-dark" style="width: 18rem;">
             <img :src="item.imageUrl" class="card-img-top" alt="...">
@@ -84,6 +89,7 @@
 
 <script>
 import AOS from 'aos';
+import SpinnerLoadingPage from './SpinnerLoadingPage.vue';
 import LoadingPage from './LoadingPage.vue';
 import messageToast from '../components/MessageToast.vue';
 
@@ -98,7 +104,7 @@ export default {
     };
   },
   components: {
-    LoadingPage, messageToast,
+    LoadingPage, SpinnerLoadingPage, messageToast,
   },
   emits: ['updateQty'],
   methods: {
@@ -137,20 +143,13 @@ export default {
     turnToProducsList() {
       this.$router.push('/productList');
     },
-    // 載入中畫面
-    loading() {
-      this.$refs.loadingPage.loadingPageShow();
-      setTimeout(() => {
-        this.$refs.loadingPage.loadingPageHide();
-      }, 1500);
-    },
     messageToastShow() {
       this.$refs.messageToast.toastShow();
     },
     // 新增至預訂清單
     addToCart() {
       console.log(this.$refs);
-      this.$refs.loadingPage.loadingPageShow();
+      this.$refs.spinnerLoadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       const data = {
         data: {
@@ -159,7 +158,7 @@ export default {
         },
       };
       this.axios.post(api, data).then((res) => {
-        this.$refs.loadingPage.loadingPageHide();
+        this.$refs.spinnerLoadingPage.loadingPageHide();
         // 更新 NavBar 的產品數量
         this.$emit('updateQty');
 
@@ -174,7 +173,7 @@ export default {
     },
     // 快速加入1件商品到購物清單
     QuickAddToCart(id) {
-      this.$refs.loadingPage.loadingPageShow();
+      this.$refs.spinnerLoadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       const data = {
         data: {
@@ -183,7 +182,7 @@ export default {
         },
       };
       this.axios.post(api, data).then((res) => {
-        this.$refs.loadingPage.loadingPageHide();
+        this.$refs.spinnerLoadingPage.loadingPageHide();
         this.$emit('updateQty');
         console.log(res);
         if (res.data.success) {

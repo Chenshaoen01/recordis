@@ -25,6 +25,9 @@
             <router-link to="/productList" class="nav-link text-white me-3">菜單介紹</router-link>
           </li>
           <li class="nav-item d-flex align-items-center">
+            <router-link to="/reservation" class="nav-link text-white me-3">線上訂位</router-link>
+          </li>
+          <li class="nav-item d-flex align-items-center">
             <button class="btn bg-none border-none nav-link text-white me-3 fs-4 position-relative"
              href="" @click="openOrderModal" @keypress="enter">
               <i class="bi bi-bag-heart"></i>
@@ -33,11 +36,6 @@
                 {{this.amoutOfOrders}}
               </span>
             </button>
-          </li>
-          <li class="nav-item d-flex align-items-center">
-            <router-link to="/orderPage" class="nav-link text-white me-3">
-              <i class="bi bi-clipboard-check fs-4"></i>
-            </router-link>
           </li>
         </ul>
       </div>

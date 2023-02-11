@@ -91,8 +91,6 @@ export default {
   },
   emits: ['updateQty'],
   methods: {
-    // http://localhost:8080/#/orderbuilt/-NN1xY1NWbbHnSbMq9Vi
-    // -NMd7PLj-nvgn73gWfUU
     getSingleOrder() {
       // 顯示載入畫面
       this.$refs.loadingPage.loadingPageShow();

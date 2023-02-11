@@ -32,14 +32,19 @@ const routes = [
     component: () => import('../views/FoodDelivery.vue'),
   },
   {
-    path: '/orderpage',
-    name: 'orderpage',
-    component: () => import('../views/OrderPage.vue'),
-  },
-  {
     path: '/orderbuilt/:id',
     name: 'orderbuilt',
     component: () => import('../views/OrderBuilt.vue'),
+  },
+  {
+    path: '/reservation',
+    name: 'reservation',
+    component: () => import('../views/ReservationPage.vue'),
+  },
+  {
+    path: '/reservationconfirm/:id',
+    name: 'reservationconfirm',
+    component: () => import('../views/ReservationConfirm.vue'),
   },
 ];
 

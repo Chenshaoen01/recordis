@@ -1,5 +1,6 @@
 <!-- eslint-disable radix -->
 <template>
+  <SpinnerLoadingPage ref="spinnerLoadingPage"></SpinnerLoadingPage>
   <LoadingPage ref="loadingPage"></LoadingPage>
   <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
   </messageToast>
@@ -20,11 +21,11 @@
       <option value="飲品">飲品</option>
     </select>
     <!-- 餐點卡片 -->
-    <div class="row gy-5 gx-xl-0 row-cols-2 row-cols-lg-3"
+    <div class="row gy-5 gx-xl-0 row-cols-2 row-cols-lg-3 mt-1"
     data-aos="fade-right" data-aos-once="true" data-aos-duration="1000">
       <div class="col d-flex justify-content-center" v-for="(item) in
        productsShown" :key="item.id">
-        <div class="card border-dark img-expand" style="width: 18rem;">
+        <div class="card border-dark card-expand" style="width: 18rem;">
           <div class="card-img-top w-100 overflow-hidden">
             <img :src="item.data.imageUrl" class="w-100" alt="...">
           </div>
@@ -65,6 +66,7 @@
 <script>
 import AOS from 'aos';
 import LoadingPage from './LoadingPage.vue';
+import SpinnerLoadingPage from './SpinnerLoadingPage.vue';
 import messageToast from '../components/MessageToast.vue';
 
 export default {
@@ -80,7 +82,7 @@ export default {
     };
   },
   components: {
-    LoadingPage, messageToast,
+    LoadingPage, SpinnerLoadingPage, messageToast,
   },
   emits: ['updateQty'],
   methods: {
@@ -150,7 +152,7 @@ export default {
       this.$router.push(`/productDetail/${id}`);
     },
     QuickAddToCart(id) {
-      this.$refs.loadingPage.loadingPageShow();
+      this.$refs.spinnerLoadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       const data = {
         data: {
@@ -159,7 +161,7 @@ export default {
         },
       };
       this.axios.post(api, data).then((res) => {
-        this.$refs.loadingPage.loadingPageHide();
+        this.$refs.spinnerLoadingPage.loadingPageHide();
         // 更新 NavBar 的產品數量
         this.$emit('updateQty');
         console.log(res);

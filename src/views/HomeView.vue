@@ -1,27 +1,13 @@
 <!-- eslint-disable vuejs-accessibility/anchor-has-content -->
 <template>
-  <LoadingPage ref="loadingPage"></LoadingPage>
+  <SpinnerLoadingPage ref="spinnerLoadingPage"></SpinnerLoadingPage>
   <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
   </messageToast>
   <div class="home">
     <!-- 廣告Modal -->
     <advertisementModal ref="advertisementModal"></advertisementModal>
     <!-- header -->
-    <div class="position-absolute d-flex justify-content-center
-     align-items-center" id="homepage-header">
-    </div>
-    <!-- header content -->
-    <div class="position-relative d-flex flex-column justify-content-center
-     align-items-center" id="homepage-header-content">
-      <img src="../assets/images/LOGO/logo2.png" style="width:300px; height:300px" alt="header-img">
-      <div class="text-white mt-3">
-        <a href="/#/about" class="text-white fs-4 text-decoration-none">關於我們</a>
-        <span class="mx-5 fs-4">X</span>
-        <a href="/#/productlist" class="text-white fs-4 text-decoration-none">菜單介紹</a>
-        <span class="mx-5">X</span>
-        <a href="#" class="text-white fs-4 text-decoration-none">查看預約清單</a>
-      </div>
-    </div>
+    <homePageHeader></homePageHeader>
     <!-- 消費方式 -->
     <div class="container mx-auto" style="max-width:800px;">
       <p class="mx-auto text-center fs-2 fw-bold border border-dark"
@@ -32,29 +18,28 @@
         <div class="col expand-target">
           <div class="d-flex flex-column
            align-items-center text-center mx-2" style="height:350px">
-           <img src="../assets/images/others/eatin.png" alt=""
-           class="mb-4" style="height:150px">
-           <p class="fs-5 fw-bold">內用點餐</p>
-           <p class="fs-4">餐點新鮮出爐<br>絕佳美味饗宴</p>
+            <img src="../assets/images/others/eatin.png" alt="" class="mb-4" style="height:150px">
+            <p class="fs-5 fw-bold">內用點餐</p>
+            <p class="fs-4">餐點新鮮出爐<br>絕佳美味饗宴</p>
           </div>
         </div>
         <div class="col expand-target">
           <div class="d-flex flex-column
            align-items-center text-center mx-2" style="height:350px">
-           <img src="../assets/images/others/takeaway.png" alt=""
-           class="mb-4" style="height:150px">
-           <p class="fs-4 fw-bold">預約外帶</p>
-           <p class="fs-4">指定取餐時間<br>省時方便 </p>
+            <img src="../assets/images/others/takeaway.png" alt=""
+             class="mb-4" style="height:150px">
+            <p class="fs-4 fw-bold">預約外帶</p>
+            <p class="fs-4">指定取餐時間<br>省時方便 </p>
           </div>
         </div>
         <div class="col expand-target">
           <div class="d-flex flex-column
            align-items-center text-center mx-2" style="height:350px">
-           <img src="../assets/images/others/fooddelivery.png" alt=""
-           class="mb-4" style="height:150px">
-           <p class="fs-4 fw-bold">外送到府</p>
-           <p class="fs-4">餐點費用達300元<br>可免費外送</p>
-           <p class="fs-6 mt-0">未達300元外送費用50元</p>
+            <img src="../assets/images/others/fooddelivery.png" alt=""
+             class="mb-4" style="height:150px">
+            <p class="fs-4 fw-bold">外送到府</p>
+            <p class="fs-4">餐點費用達300元<br>可免費外送</p>
+            <p class="fs-6 mt-0">未達300元外送費用50元</p>
           </div>
         </div>
       </div>
@@ -63,11 +48,10 @@
     <div class="container mt-4 d-flex flex-column align-items-center
      justify-contnent-center" style="max-width:1000px;">
       <div id="introduction1" data-aos="fade-right" data-aos-duration="2000"
-      class="w-100 d-flex justify-content-center align-items-end">
+        class="w-100 d-flex justify-content-center align-items-end">
         <div id="introduction1-box" class="position-relative mb-5 border border-dark border-2
          d-flex justify-content-lg-end  justify-content-center align-items-end">
-          <div id="introduction1-img"
-          class="position-absolute"></div>
+          <div id="introduction1-img" class="position-absolute"></div>
           <div id="introduction1-text">
             <h1 class="fw-bold mb-5">對品質的堅持</h1>
             <p class="fs-3">有機栽種安全衛生</p>
@@ -76,11 +60,10 @@
         </div>
       </div>
       <div id="introduction2" data-aos="fade-left" data-aos-duration="2000"
-      class="w-100 d-flex justify-content-center align-items-end">
+        class="w-100 d-flex justify-content-center align-items-end">
         <div id="introduction2-box" class="position-relative mb-5 border border-dark border-2
          d-flex justify-content-lg-start justify-content-center align-items-end">
-          <div id="introduction2-img"
-          class="position-absolute"></div>
+          <div id="introduction2-img" class="position-absolute"></div>
           <div id="introduction2-text" class="text-center">
             <h2 class="fw-bold">Recordis</h2>
             <h2 class="fw-bold mb-5">在拉丁文中代表著記憶</h2>
@@ -110,8 +93,8 @@
     <!-- 餐點卡片 -->
     <div class="container my-4" style="max-width:1000px;"
      data-aos="fade-right" data-aos-duration="1000">
-      <div class="row g-3 gx-xl-0 row-cols-2 row-cols-lg-3">
-        <div class="col d-flex justify-content-center"
+      <div class="row gx-4 gy-5 row-cols-2 row-cols-lg-3">
+        <div class="col d-flex justify-content-center card-expand"
          v-for="(item) in recommandedProducts" :key="item.id">
           <div class="card border-dark" style="width: 18rem;">
             <img :src="item.imageUrl" class="card-img-top" alt="...">
@@ -126,7 +109,7 @@
                 詳細資訊
               </span>
               <span class="d-block text-center text-decoration-none w-50 lh-lg link-hover"
-               @click="QuickAddToCart(item.id)" @keyup="plus">
+                @click="QuickAddToCart(item.id)" @keyup="plus">
                 預約外帶
               </span>
             </div>
@@ -134,8 +117,8 @@
         </div>
         <router-link to="/productList" type="button"
          class="my-5 mx-auto btn btn-dark" style="width:150px;">
-        查看所有餐點
-      </router-link>
+          查看所有餐點
+        </router-link>
       </div>
     </div>
   </div>
@@ -144,8 +127,9 @@
 <script>
 import AOS from 'aos';
 import advertisementModal from '../components/AdvertisementModal.vue';
-import LoadingPage from './LoadingPage.vue';
+import SpinnerLoadingPage from './SpinnerLoadingPage.vue';
 import messageToast from '../components/MessageToast.vue';
+import homePageHeader from '../components/HomePageHeader.vue';
 
 export default {
   data() {
@@ -158,7 +142,7 @@ export default {
   },
   emits: ['updateQty'],
   components: {
-    advertisementModal, LoadingPage, messageToast,
+    homePageHeader, advertisementModal, SpinnerLoadingPage, messageToast,
   },
   methods: {
     getrecommandedProducts(id) {
@@ -168,7 +152,7 @@ export default {
       });
     },
     QuickAddToCart(id) {
-      this.$refs.loadingPage.loadingPageShow();
+      this.$refs.spinnerLoadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       const data = {
         data: {
@@ -177,7 +161,7 @@ export default {
         },
       };
       this.axios.post(api, data).then((res) => {
-        this.$refs.loadingPage.loadingPageHide();
+        this.$refs.spinnerLoadingPage.loadingPageHide();
         // 更新 NavBar 的產品數量
         this.$emit('updateQty');
         console.log(res);

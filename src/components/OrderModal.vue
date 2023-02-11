@@ -1,10 +1,10 @@
 <template>
-  <LoadingPage ref="loadingPage"></LoadingPage>
+  <SpinnerLoadingPage ref="spinnerLoadingPage"></SpinnerLoadingPage>
   <div class="modal modal-lg" tabindex="-1" id="orderModal" style="z-index:10000;">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
-          <div class="container w-75">
+          <div class="container" style="max-width:500px">
             <!-- 標題 -->
             <div class="border-bottom border-dark d-flex justify-content-center
               align-items-center">
@@ -18,7 +18,7 @@
             </div>
             <!-- 如果沒有預定餐點顯示以下部分 -->
             <div class="w-100 text-center" v-if="cartContent.total === 0">
-              <i class="bi bi-basket2-fill text-dark" style="font-size: 15rem;"></i>
+              <i class="bi bi-basket2-fill text-dark" id="empty-bag-Img"></i>
               <p class="fs-2">目前尚無預定餐點</p>
               <router-link to="/productList" class="btn btn-lg btn-dark mt-3 mb-5"
                @click="modalClose">
@@ -34,35 +34,35 @@
                   <thead>
                     <tr>
                       <th class="col-4">品項</th>
-                      <th>單價</th>
+                      <th class="text-center">單價</th>
                       <th class="text-center">數量</th>
-                      <th>小計</th>
+                      <!-- <th>小計</th> -->
                       <th class="col-1"></th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(item, i) in cartContent.carts" :key="item.id">
                       <td>{{ item.product.title }}</td>
-                      <td>{{ item.product.price }}</td>
+                      <td class="text-center">{{ item.product.price }}</td>
                       <td class="text-center">
                         <!-- 減少一個 -->
                         <button type="button" class="btn btn-sm rounded-circle
-                         btn-outline-dark me-3 text-center p-0"
+                         btn-outline-dark me-1 me-sm-3 text-center p-0"
                           @click="changeQty(item.id, i, item.qty-1)"
-                          style="width:30px; height:30px; line-height: 30px;">
+                          style="width:20px; height:20px; line-height: 20px;">
                           <i class="bi bi-dash-lg"></i>
                         </button>
                         <!-- 數量 -->
                         {{ item.qty }}
                         <!-- 增加一個 -->
                         <button type="button" class="btn btn-sm rounded-circle
-                         btn-outline-dark ms-3 text-center p-0"
+                         btn-outline-dark ms-1 ms-sm-3 text-center p-0"
                           @click="changeQty(item.id, i, item.qty+1)"
-                          style="width:30px; height:30px; line-height: 30px;">
+                          style="width:20px; height:20px; line-height: 20px;">
                           <i class="bi bi-plus-lg"></i>
                         </button>
                       </td>
-                      <td>{{ item.total }}</td>
+                      <!-- <td>{{ item.total }}</td> -->
                       <td>
                         <button type="button" class="btn btn-otline-dark border-none"
                          @click="cancelCart(item.id)">
@@ -101,7 +101,7 @@
 
 <script>
 import Modal from 'bootstrap/js/dist/modal';
-import LoadingPage from '../views/LoadingPage.vue';
+import SpinnerLoadingPage from '../views/SpinnerLoadingPage.vue';
 
 export default {
   data() {
@@ -114,7 +114,7 @@ export default {
       amoutOfOrders: 0,
     };
   },
-  components: { LoadingPage },
+  components: { SpinnerLoadingPage },
   emits: ['updateAmoutOfOrders'],
   methods: {
     // 開啟Modal
@@ -127,8 +127,6 @@ export default {
     },
     // 取得預訂內容
     getCartContent() {
-      // 顯示載入中畫面
-      // this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
         console.log(res);
@@ -136,7 +134,7 @@ export default {
         console.log(this.cartContent);
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
         // 移除載入中畫面
-        this.$refs.loadingPage.loadingPageHide();
+        this.$refs.spinnerLoadingPage.loadingPageHide();
         // 更新NavBar顯示的數量
         this.amoutOfOrders = this.cartContent.carts.length;
         this.$emit('updateAmoutOfOrders', this.amoutOfOrders);
@@ -145,7 +143,7 @@ export default {
     // 取消某一筆預定內容
     cancelCart(id) {
       // 顯示載入中畫面
-      this.$refs.loadingPage.loadingPageShow();
+      this.$refs.spinnerLoadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart/${id}`;
       this.axios.delete(api).then((res) => {
         console.log(res);
@@ -160,7 +158,7 @@ export default {
     changeQty(productId, productNum, newQty) {
       if (newQty !== 0) {
         // 顯示載入中畫面
-        this.$refs.loadingPage.loadingPageShow();
+        this.$refs.spinnerLoadingPage.loadingPageShow();
         console.log('changeQty');
         console.log(productId, productNum, newQty);
         // 將資料寫回資料庫

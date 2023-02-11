@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-body p-0 position-relative w-100" id="advertisementModalBody">
                     <img class="w-100 overflow-hidden opacity-0"
-                    src="../assets/images/advertisement/openingDiscount.gif" alt=""
+                    src="../assets/images/advertisement/openingDiscount.jpg" alt=""
                     id="advertisementModalImg">
                     <i class="bi bi-x-circle-fill position-absolute fs-3"
                      id="advertisementModalCloseModal" @click="modalClose" @keypress="esc"></i>

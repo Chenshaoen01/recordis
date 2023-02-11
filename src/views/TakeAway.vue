@@ -257,6 +257,7 @@ export default {
         { option: '20:31 ~ 20:45', passed: false },
         { option: '20:46 ~ 21:00', passed: false },
       ],
+      alreadyValidated: false,
     };
   },
   components: {
@@ -309,8 +310,12 @@ export default {
       });
     },
     formValidation() {
+      let confirmButtonClicked = true;
       const confirmOrderAfterValidation = () => {
-        this.confirmOrder();
+        if (this.alreadyValidated === false) {
+          this.confirmOrder();
+        }
+        this.alreadyValidated = true;
       };
       // Fetch all the forms we want to apply custom Bootstrap validation styles to
       const forms = document.querySelectorAll('.needs-validation');
@@ -319,10 +324,13 @@ export default {
       Array.from(forms).forEach((form) => {
         form.addEventListener('click', (event) => {
           if (!form.checkValidity()) {
+            confirmButtonClicked = false;
             event.preventDefault();
             event.stopPropagation();
           } else if (form.checkValidity()) {
-            confirmOrderAfterValidation();
+            if (confirmButtonClicked === true) {
+              confirmOrderAfterValidation();
+            }
           }
 
           form.classList.add('was-validated');
@@ -367,7 +375,7 @@ export default {
       if (m <= 12) {
         this.timeOptionFirstDay[m - 1].passed = true;
         console.log(m, this.timeOptionFirstDay[m - 1]);
-      } else if (m >= 29 && m <= 40) {
+      } else if (m >= 25 && m <= 40) {
         this.timeOptionFirstDay[m - 13].passed = true;
         console.log(this.timeOptionFirstDay[m - 13]);
       }
