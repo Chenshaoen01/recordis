@@ -192,7 +192,6 @@ export default {
     },
     // 切換到詳細產品資訊頁面
     turnToDetailPage(id) {
-      console.log(id);
       this.$route.params.id = id;
       // 重新取得產品資訊
       this.getProductDetail();

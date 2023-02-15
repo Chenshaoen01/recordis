@@ -128,27 +128,31 @@
               </div>
             </div>
             <div class="mt-4">
-              <select class="form-select shadow-none" aria-label="Default select example"
-               v-model="orderTime" required v-if="firstDate === orderDate">
-                <option disabled selected value="">請選擇取餐時段</option>
-                <option v-for="(item) in timeOptionFirstDay" :key="item.option" :value="item.option"
-                 :disabled="item.passed">
-                  {{ item.option }}
-                </option>
-              </select>
-              <div class="invalid-feedback">
-                 請選擇取餐時間
+              <div v-if="firstDate === orderDate">
+                  <select class="form-select shadow-none" aria-label="Default select example"
+                 v-model="orderTime" required>
+                  <option disabled selected value="">請選擇取餐時段</option>
+                  <option v-for="(item) in timeOptionFirstDay" :key="item.option"
+                   :value="item.option" :disabled="item.passed">
+                    {{ item.option }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">
+                   請選擇取餐時間
+                </div>
               </div>
-              <select class="form-select shadow-none" aria-label="Default select example"
-               v-model="orderTime" required v-if="firstDate !== orderDate">
-                <option disabled selected value="">請選擇取餐時段</option>
-                <option v-for="(item) in timeOptionOtherDay" :key="item.option" :value="item.option"
-                 :disabled="item.passed">
-                  {{ item.option }}
-                </option>
-              </select>
-              <div class="invalid-feedback">
-                 請選擇取餐時間
+              <div v-if="firstDate !== orderDate">
+                  <select class="form-select shadow-none" aria-label="Default select example"
+                 v-model="orderTime" required>
+                  <option disabled selected value="">請選擇取餐時段</option>
+                  <option v-for="(item) in timeOptionOtherDay" :key="item.option"
+                   :value="item.option" :disabled="item.passed">
+                    {{ item.option }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">
+                   請選擇取餐時間
+                </div>
               </div>
             </div>
           </div>

@@ -188,7 +188,6 @@ export default {
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
         this.cartContent = res.data.data;
-        console.log(this.cartContent);
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
       });
     },

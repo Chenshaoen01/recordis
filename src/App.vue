@@ -114,7 +114,6 @@ export default {
       this.amoutOfOrders = amout;
     },
     updateOrderQty() {
-      console.log('updateOrderQty');
       this.$refs.orderModal.getCartContent();
     },
   },

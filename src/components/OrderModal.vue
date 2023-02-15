@@ -130,7 +130,6 @@ export default {
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
         this.cartContent = res.data.data;
-        console.log(this.cartContent);
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
         // 移除載入中畫面
         this.$refs.spinnerLoadingPage.loadingPageHide();
@@ -164,10 +163,8 @@ export default {
             qty: newQty,
           },
         };
-        console.log(data);
         const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart/${productId}`;
-        this.axios.put(api, data).then((res) => {
-          console.log(res);
+        this.axios.put(api, data).then(() => {
           // 重新取得資料
           this.getCartContent();
         });
