@@ -97,11 +97,9 @@ export default {
       const orderId = this.$route.params.id;
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/order/${orderId}`;
       this.axios.get(api).then((res) => {
-        console.log(res);
         this.order = res.data.order;
         // 編輯時間資訊
         const orderDate = this.order.user.email.split('/');
-        console.log(orderDate);
         let num = 0;
         this.orderTime.month = orderDate[num];
         num += 1;

@@ -187,7 +187,6 @@ export default {
     getCartContent() {
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
-        console.log(res);
         this.cartContent = res.data.data;
         console.log(this.cartContent);
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
@@ -226,8 +225,7 @@ export default {
     // 把購物車清空
     clearCart() {
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/carts`;
-      this.axios.delete(api).then((res) => {
-        console.log('clearCart', res);
+      this.axios.delete(api).then(() => {
         // 接續-在購物車加入"預定餐廳"
         this.addProductReservation();
       });
@@ -241,8 +239,7 @@ export default {
         },
       };
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
-      this.axios.post(api, data).then((res) => {
-        console.log('addProductReservation', res);
+      this.axios.post(api, data).then(() => {
         // 接續-確認訂位
         this.confirmReservation();
       });
@@ -262,7 +259,6 @@ export default {
       };
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/order`;
       this.axios.post(api, data).then((res) => {
-        console.log('confirmReservation', res);
         // 接續-把購物車的東西加回去
         this.addCartProductsBack(res.data.orderId);
       });
@@ -278,8 +274,7 @@ export default {
             },
           };
           const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
-          this.axios.post(api, data).then((res) => {
-            console.log('addCartProductsBack', res);
+          this.axios.post(api, data).then(() => {
             this.pushToConfirmPage(id);
           });
         });

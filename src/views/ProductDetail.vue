@@ -116,9 +116,7 @@ export default {
       const productId = this.$route.params.id;
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/product/${productId}`;
       this.axios.get(api).then((res) => {
-        console.log(res);
         this.productsDetail = res.data.product;
-        console.log(this.productsDetail);
         // 移除載入畫面
         this.$refs.loadingPage.loadingPageHide();
       });
@@ -148,7 +146,6 @@ export default {
     },
     // 新增至預訂清單
     addToCart() {
-      console.log(this.$refs);
       this.$refs.spinnerLoadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       const data = {
@@ -184,7 +181,6 @@ export default {
       this.axios.post(api, data).then((res) => {
         this.$refs.spinnerLoadingPage.loadingPageHide();
         this.$emit('updateQty');
-        console.log(res);
         if (res.data.success) {
           this.toastMessage = '餐點已加入預訂清單';
           this.$refs.messageToast.toastShow();
@@ -218,7 +214,6 @@ export default {
     this.recommandedProductsId.forEach((item) => {
       this.getrecommandedProducts(item);
     });
-    console.log(this.recommandedProducts);
 
     AOS.init();
   },

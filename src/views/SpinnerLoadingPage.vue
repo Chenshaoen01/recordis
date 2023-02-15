@@ -18,7 +18,6 @@ export default {
   methods: {
     loadingPageShow() {
       const spinnerloading = document.getElementById('spinnerloading');
-      console.log(spinnerloading);
       spinnerloading.classList.remove('d-none');
     },
     loadingPageHide() {

@@ -1,5 +1,7 @@
 <template>
   <LoadingPage ref="loadingPage"></LoadingPage>
+  <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
+  </messageToast>
   <div class="container d-flex justify-content-center">
     <div class="w-75">
       <div class="border-bottom border-dark d-flex justify-content-center
@@ -199,6 +201,7 @@
 </template>
 <script>
 import LoadingPage from './LoadingPage.vue';
+import messageToast from '../components/MessageToast.vue';
 
 export default {
   data() {
@@ -284,7 +287,7 @@ export default {
     };
   },
   components: {
-    LoadingPage,
+    LoadingPage, messageToast,
   },
   methods: {
     // 取得預訂內容
@@ -292,9 +295,7 @@ export default {
       this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
-        console.log(res);
         this.cartContent = res.data.data;
-        console.log(this.cartContent);
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
         // 判斷是否免費外送
         if (this.cartContent.total >= 200) {
@@ -315,9 +316,16 @@ export default {
         },
       };
       this.axios.post(api, data).then((res) => {
-        console.log(res);
         this.getCartContent();
         this.$refs.loadingPage.loadingPageHide();
+
+        if (res.data.success) {
+          this.toastMessage = '已成功使用優惠代碼';
+          this.$refs.messageToast.toastShow();
+        } else {
+          this.toastMessage = '優惠代碼輸入錯誤或已超過使用期限';
+          this.$refs.messageToast.toastShow();
+        }
       });
     },
     // 加入外送費
@@ -329,8 +337,7 @@ export default {
           qty: 1,
         },
       };
-      this.axios.post(api, data).then((res) => {
-        console.log(res);
+      this.axios.post(api, data).then(() => {
       });
     },
     // 送出訂單
@@ -350,7 +357,6 @@ export default {
         };
         const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/order`;
         this.axios.post(api, data).then((res) => {
-          console.log(res);
           this.$router.push(`/orderbuilt/${res.data.orderId}`);
         });
       };
@@ -363,8 +369,7 @@ export default {
             qty: 1,
           },
         };
-        this.axios.post(api, data).then((res) => {
-          console.log(res);
+        this.axios.post(api, data).then(() => {
           sentOrder();
         });
       };

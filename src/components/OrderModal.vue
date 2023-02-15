@@ -129,7 +129,6 @@ export default {
     getCartContent() {
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart`;
       this.axios.get(api).then((res) => {
-        console.log(res);
         this.cartContent = res.data.data;
         console.log(this.cartContent);
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
@@ -145,8 +144,7 @@ export default {
       // 顯示載入中畫面
       this.$refs.spinnerLoadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/cart/${id}`;
-      this.axios.delete(api).then((res) => {
-        console.log(res);
+      this.axios.delete(api).then(() => {
         this.getCartContent();
       });
     },
@@ -159,8 +157,6 @@ export default {
       if (newQty !== 0) {
         // 顯示載入中畫面
         this.$refs.spinnerLoadingPage.loadingPageShow();
-        console.log('changeQty');
-        console.log(productId, productNum, newQty);
         // 將資料寫回資料庫
         const data = {
           data: {

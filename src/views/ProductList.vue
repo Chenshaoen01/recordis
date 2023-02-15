@@ -21,7 +21,7 @@
       <option value="飲品">飲品</option>
     </select>
     <!-- 餐點卡片 -->
-    <div class="row gy-5 gx-xl-0 row-cols-2 row-cols-lg-3 mt-1"
+    <div class="row gy-5 gx-xl-0 row-cols-2 row-cols-md-3 mt-1"
     data-aos="fade-right" data-aos-once="true" data-aos-duration="1000">
       <div class="col d-flex justify-content-center" v-for="(item) in
        productsShown" :key="item.id">
@@ -91,7 +91,6 @@ export default {
       this.$refs.loadingPage.loadingPageShow();
       const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/products/all`;
       this.axios.get(api).then((res) => {
-        console.log(res);
         // 取得所有產品資訊
         this.productsInfo = res.data.products;
         const productsEdited = [];
@@ -127,13 +126,12 @@ export default {
                 productsEdited.push(dataPushed);
               }
             }
-            console.log(productsEdited);
+            console.log('productsEdited');
           }
           this.$refs.loadingPage.loadingPageHide();
         });
         // 將編輯完的結果寫回資料庫
         this.productsShown = productsEdited;
-        console.log(this.productsShown);
         // 計算頁數
         this.pagination = [];
         const maxPage = Math.ceil(productsQty / 9);
@@ -141,7 +139,6 @@ export default {
         for (let i = 1; i <= maxPage; i += 1) {
           this.pagination.push(i);
         }
-        console.log(this.pagination);
       });
     },
     changePage(newPage) {
@@ -164,7 +161,6 @@ export default {
         this.$refs.spinnerLoadingPage.loadingPageHide();
         // 更新 NavBar 的產品數量
         this.$emit('updateQty');
-        console.log(res);
         if (res.data.success) {
           this.toastMessage = '餐點已加入預訂清單';
           this.$refs.messageToast.toastShow();

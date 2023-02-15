@@ -93,7 +93,7 @@
     <!-- 餐點卡片 -->
     <div class="container my-4" style="max-width:1000px;"
      data-aos="fade-right" data-aos-duration="1000">
-      <div class="row gx-4 gy-5 row-cols-2 row-cols-lg-3">
+      <div class="row gx-4 gy-5 row-cols-2 row-cols-md-3">
         <div class="col d-flex justify-content-center card-expand"
          v-for="(item) in recommandedProducts" :key="item.id">
           <div class="card border-dark" style="width: 18rem;">
@@ -164,7 +164,6 @@ export default {
         this.$refs.spinnerLoadingPage.loadingPageHide();
         // 更新 NavBar 的產品數量
         this.$emit('updateQty');
-        console.log(res);
         if (res.data.success) {
           this.toastMessage = '餐點已加入預訂清單';
           this.$refs.messageToast.toastShow();
@@ -199,7 +198,6 @@ export default {
     this.recommandedProductsId.forEach((item) => {
       this.getrecommandedProducts(item);
     });
-    console.log(this.recommandedProducts);
 
     AOS.init();
   },
