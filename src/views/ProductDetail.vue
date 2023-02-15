@@ -37,7 +37,7 @@
         </div>
         <div class="mt-5 mb-3 w-100 d-flex justify-content-center">
           <button type="button" class="btn btn-dark" style="width:150px;"
-           @click="addToCart">加入預約清單</button>
+           @click="addToCart">加入預訂清單</button>
         </div>
       </div>
     </div>
@@ -72,7 +72,7 @@
                 </span>
                 <span class="d-block text-center text-decoration-none w-50 lh-lg link-hover"
                  @click="QuickAddToCart(item.id)" @keyup="plus">
-                  預約外帶
+                 預訂餐點
                 </span>
               </div>
             </div>

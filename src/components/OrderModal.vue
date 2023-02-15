@@ -13,13 +13,13 @@
                 <img src="../assets/images/LOGO/logo1.png"
                  style="width:100px; height:100px" alt="header-img"
                   class="me-md-5">
-                <span class="fs-2 d-block mt-2">預定餐點</span>
+                <span class="fs-2 d-block mt-2">預訂餐點</span>
               </div>
             </div>
             <!-- 如果沒有預定餐點顯示以下部分 -->
             <div class="w-100 text-center" v-if="cartContent.total === 0">
               <i class="bi bi-basket2-fill text-dark" id="empty-bag-Img"></i>
-              <p class="fs-2">目前尚無預定餐點</p>
+              <p class="fs-2">目前尚無預訂餐點</p>
               <router-link to="/productList" class="btn btn-lg btn-dark mt-3 mb-5"
                @click="modalClose">
                 前往選購餐點
@@ -29,7 +29,7 @@
             <div v-if="cartContent.total !== 0">
               <!-- 預約餐點內容 -->
               <div class="border-bottom border-dark py-4">
-                <p class="fs-4">預約訂單內容</p>
+                <p class="fs-4">預訂餐點內容</p>
                 <table class="table">
                   <thead>
                     <tr>

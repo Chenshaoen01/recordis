@@ -39,7 +39,7 @@
               @keyup="enter">詳細資訊</span>
               <span class="d-block text-center text-decoration-none w-50 lh-lg link-hover"
                @click="QuickAddToCart(item.data.id)" @keyup="plus">
-                預約外帶
+                預訂餐點
               </span>
           </div>
         </div>
