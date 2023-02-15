@@ -8,17 +8,20 @@
      align-items-center" id="homepage-header-content">
     <img src="../assets/images/LOGO/logo1.png" style="width:250px; height:250px" alt="header-img">
     <div class="text-dark mt-3 d-flex flex-column flex-md-row">
-      <a href="/#/about" class="text-dark fs-4 fw-bold text-decoration-none mb-2 mb-md-0">
+      <router-link to="/about" class="text-dark fs-4 fw-bold
+       text-decoration-none mb-2 mb-md-0">
         關於我們
-      </a>
+      </router-link>
       <span class="mx-5 fs-4 d-none d-md-block">X</span>
-      <a href="/#/productlist" class="text-dark fs-4 fw-bold text-decoration-none mb-2 mb-md-0">
+      <router-link to="/productlist" class="text-dark fs-4 fw-bold
+       text-decoration-none mb-2 mb-md-0">
         菜單介紹
-      </a>
+      </router-link>
       <span class="mx-5 fs-4 d-none d-md-block">X</span>
-      <a href="/#/reservation" class="text-dark fs-4 fw-bold text-decoration-none mb-2 mb-md-0">
+      <router-link to="/reservation" class="text-dark fs-4 fw-bold
+       text-decoration-none mb-2 mb-md-0">
         線上訂位
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
