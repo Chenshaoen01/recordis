@@ -43,7 +43,7 @@ export default {
     };
   },
   methods: {
-    changeHeaderImg() {
+    changeImgNum() {
       if (this.currentImgNum !== 3) {
         // 切換圖片
         this.currentImgNum += 1;
@@ -53,33 +53,32 @@ export default {
         this.currentImgNum = 1;
         this.currentHeaderImgSrc = this.imgSrc[this.currentImgNum - 1];
       }
-      setTimeout(() => {
-        setInterval(() => {
-          if (this.currentImgNum !== 3) {
-            // 切換圖片
-            this.currentImgNum += 1;
-            this.currentHeaderImgSrc = this.imgSrc[this.currentImgNum - 1];
-          } else if (this.currentImgNum === 3) {
-            // 切換圖片
-            this.currentImgNum = 1;
-            this.currentHeaderImgSrc = this.imgSrc[this.currentImgNum - 1];
-          }
-        }, 5000);
-      }, 2000);
+    },
+    changeOpacityVisible() {
+      const homePageHeader = document.getElementById('homePageHeader');
+      homePageHeader.classList.remove('opacity-0');
+      homePageHeader.classList.add('opacity-100');
+    },
+    changeOpacityInvisible() {
+      const homePageHeader = document.getElementById('homePageHeader');
+      homePageHeader.classList.remove('opacity-100');
+      homePageHeader.classList.add('opacity-0');
+    },
+    changeHeaderImg() {
       const changeImgOpacity = setInterval(() => {
         if (this.keepInterval === true) {
-          const homePageHeader = document.getElementById('homePageHeader');
-
           setTimeout(() => {
-            homePageHeader.classList.remove('opacity-100');
-            homePageHeader.classList.add('opacity-0');
+            this.changeOpacityInvisible();
           }, 0);
           setTimeout(() => {
-            homePageHeader.classList.remove('opacity-0');
-            homePageHeader.classList.add('opacity-100');
+            this.changeImgNum();
+          }, 2200);
+          setTimeout(() => {
+            this.changeOpacityVisible();
           }, 2500);
         }
       }, 5000);
+      // 停止執行更換headerImg
       setInterval(() => {
         if (this.keepInterval === false) {
           // clearInterval(changeImgNum);
@@ -94,14 +93,12 @@ export default {
   },
   mounted() {
     this.changeHeaderImg();
-    const homePageHeader = document.getElementById('homePageHeader');
-
-    homePageHeader.classList.remove('opacity-100');
-    homePageHeader.classList.add('opacity-0');
-
+    this.changeOpacityInvisible();
     setTimeout(() => {
-      homePageHeader.classList.remove('opacity-0');
-      homePageHeader.classList.add('opacity-100');
+      this.changeImgNum();
+    }, 2200);
+    setTimeout(() => {
+      this.changeOpacityVisible();
     }, 2500);
   },
   beforeUnmount() {

@@ -2,7 +2,7 @@
   <LoadingPage ref="loadingPage"></LoadingPage>
   <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
   </messageToast>
-  <div class="container d-flex justify-content-center">
+  <div class="container d-flex justify-content-center" style="max-width: 800px">
     <div class="w-75">
       <div class="border-bottom border-dark d-flex justify-content-center
        align-items-center">
