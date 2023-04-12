@@ -5,11 +5,11 @@
   <div class="container d-flex justify-content-center" style="max-width: 800px">
     <div class="w-75">
       <div class="border-bottom border-dark d-flex justify-content-center
-       align-items-center">
+           align-items-center">
         <div class="my-4 w-50 d-flex justify-content-between
-         align-items-center flex-column flex-md-row">
-          <img src="../assets/images/LOGO/logo1.png" style="width:100px; height:100px"
-           alt="header-img" class="me-lg-5">
+             align-items-center flex-column flex-md-row">
+          <img src="../assets/images/LOGO/logo1.png"
+           style="width:100px; height:100px" alt="header-img" class="me-lg-5">
           <span class="fs-2 d-block mt-2">預約外帶</span>
         </div>
       </div>
@@ -45,8 +45,8 @@
         <div class="border-bottom border-dark py-4">
           <p class="fs-4">優惠券</p>
           <div class="input-group mb-3">
-            <input type="text" class="form-control shadow-none" v-model="couponCode"
-             placeholder="請輸入優惠券代碼"
+            <input type="text" class="form-control shadow-none"
+             v-model="couponCode" placeholder="請輸入優惠券代碼"
               aria-label="Recipient's username">
             <button class="btn btn-dark" type="button" @click="coupon">
               送出優惠券
@@ -85,7 +85,7 @@
           </table>
         </div>
         <!-- 取餐資訊表單 -->
-        <form action="" class="needs-validation" novalidate>
+        <form action="">
           <!-- 預約取餐時間 -->
           <div class="border-bottom border-dark py-4">
             <p class="fs-4">預約取餐時間</p>
@@ -93,54 +93,57 @@
               <div class="form-check col" v-for="(item) in date" :key="item">
                 <label class="form-check-label btn btn-outline-dark w-100"
                  v-if="this.orderDate !== item" :for="item">
-                   {{ item }}
-                   <input class="form-check-input d-none" type="radio" :name="date"
-                    :id="item" v-model="orderDate" :value="item" required
-                     :selected="item === this.orderDate">
-                   <div class="invalid-feedback">
-                      請選擇取餐日期
-                   </div>
+                  {{ item }}
+                  <input class="form-check-input d-none" type="radio"
+                   :name="date" :id="item" v-model="orderDate"
+                    :value="item" required :selected="item === this.orderDate">
                 </label>
                 <label class="form-check-label btn btn-dark w-100"
                  v-if="this.orderDate === item" :for="item">
-                   {{ item }}
-                   <input class="form-check-input d-none" type="radio" :name="date"
-                    :id="item" v-model="orderDate" :value="item" required
-                     :selected="item === this.orderDate">
-                   <div class="invalid-feedback">
-                      請選擇取餐日期
-                   </div>
+                  {{ item }}
+                  <input class="form-check-input d-none" type="radio"
+                   :name="date" :id="item" v-model="orderDate"
+                    :value="item" required :selected="item === this.orderDate">
                 </label>
               </div>
             </div>
             <div class="mt-4">
               <div v-if="firstDate === orderDate">
-                  <select class="form-select shadow-none"   aria-label="Default select example"
-                 v-model="orderTime" required>
+                <select class="form-select shadow-none" aria-label="Default select example"
+                 v-model="orderTime" required
+                  @change="validation('time')">
                   <option disabled selected value="">請選擇取餐時段</option>
                   <option v-for="(item) in timeOptionFirstDay" :key="item.option"
-                   :value="item.option" :disabled="item.passed">
+                   :value="item.option"
+                    :disabled="item.passed">
                     {{ item.option }}
                   </option>
-                  <div class="invalid-feedback">
-                   請選擇取餐時間
-                   </div>
                 </select>
-                <div class="invalid-feedback">
-                   請選擇取餐時間
+                <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist">
+                  {{ errorMessage.time.required.message }}
+                </div>
+                <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist !== true
+                  && errorMessage.time.reg.exist">
+                  {{ errorMessage.time.reg.message }}
                 </div>
               </div>
               <div v-if="firstDate !== orderDate">
                 <select class="form-select shadow-none" aria-label="Default select example"
-                 v-model="orderTime" required>
+                v-model="orderTime" required
+                  @change="validation('time')">
                   <option disabled selected value="">請選擇取餐時段</option>
-                  <option v-for="(item) in timeOptionOtherDay" :key="item.option"
-                   :value="item.option" :disabled="item.passed">
+                  <option v-for="(item) in timeOptionOtherDay"
+                   :key="item.option" :value="item.option"
+                    :disabled="item.passed">
                     {{ item.option }}
                   </option>
                 </select>
-                <div class="invalid-feedback">
-                   請選擇取餐時間
+                <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist">
+                  {{ errorMessage.time.required.message }}
+                </div>
+                <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist !== true
+                  && errorMessage.time.reg.exist">
+                  {{ errorMessage.time.reg.message }}
                 </div>
               </div>
             </div>
@@ -152,29 +155,38 @@
               取餐人姓名
               <input type="text" class="form-control shadow-none mt-1"
                v-model="orderMessage.user.name"
-                placeholder="請輸入取餐人姓名" aria-label="Recipient's username" required>
-                <div class="invalid-feedback">
-                   請輸入取餐人姓名
-                 </div>
+               placeholder="請輸入取餐人姓名" aria-label="Recipient's username"
+                required @change="validation('name')">
+              <div class="mb-3 mt-1 text-danger" v-if="errorMessage.name.required.exist">
+                {{ errorMessage.name.required.message }}
+              </div>
+              <div class="mb-3 mt-1 text-danger" v-if="errorMessage.name.required.exist !== true
+                && errorMessage.name.reg.exist">
+                {{ errorMessage.name.reg.message }}
+              </div>
             </label>
             <label for="name" class="w-100 mt-3">
-              取餐人連絡電話
-              <input type="tel" class="form-control shadow-none mt-1"
+              取餐人聯絡電話
+              <input type="number" class="form-control shadow-none mt-1"
                v-model="orderMessage.user.tel" placeholder="請輸入取餐人連絡電話"
-                aria-label="Recipient's username" required>
-              <div class="invalid-feedback">
-                 請輸入取餐人連絡電話
-               </div>
+                aria-label="Recipient's username" required @change="validation('tel')">
+              <div class="mb-3 mt-1 text-danger" v-if="errorMessage.tel.required.exist">
+                {{ errorMessage.tel.required.message }}
+              </div>
+              <div class="mb-3 mt-1 text-danger" v-if="errorMessage.tel.required.exist !== true
+                && errorMessage.tel.reg.exist">
+                {{ errorMessage.tel.reg.message }}
+              </div>
             </label>
             <label for="message" class="w-100 mt-3">
               備註訊息
-              <textarea  class="form-control shadow-none mt-1"
+              <textarea class="form-control shadow-none mt-1"
                cols="30" rows="5" v-model="orderMessage.message">
-              </textarea>
+                  </textarea>
             </label>
           </div>
           <div class="py-4 text-center">
-            <button class="btn btn-lg btn-dark px-4" type="button" @click="formValidation">
+            <button class="btn btn-lg btn-dark px-4" type="button" @click="finalValidation">
               送出訂單
             </button>
           </div>
@@ -267,7 +279,30 @@ export default {
         { option: '20:31 ~ 20:45', passed: false },
         { option: '20:46 ~ 21:00', passed: false },
       ],
-      alreadyValidated: false,
+      rules: {
+        date: { required: true, reg: '' },
+        time: { required: true, reg: '' },
+        name: { required: true, reg: /^[\u4e00-\u9fa5_a-za-z]+$/ },
+        tel: { required: true, reg: /^(9)[0-9]{8}$/ },
+      },
+      errorMessage: {
+        date: {
+          required: { exist: false, message: '請選擇日期' },
+          reg: { exist: false, message: '日期格式錯誤' },
+        },
+        time: {
+          required: { exist: false, message: '請選擇時間' },
+          reg: { exist: false, message: '時間格式錯誤' },
+        },
+        name: {
+          required: { exist: false, message: '請填入姓名' },
+          reg: { exist: false, message: '姓名格式錯誤' },
+        },
+        tel: {
+          required: { exist: false, message: '請填入聯絡電話' },
+          reg: { exist: false, message: '聯絡電話格式錯誤' },
+        },
+      },
     };
   },
   components: {
@@ -306,6 +341,7 @@ export default {
         }
       });
     },
+    // 送出訂單並跳轉至訂單完成頁面
     confirmOrder() {
       const data = {
         data: {
@@ -323,33 +359,63 @@ export default {
         this.$router.push(`/orderbuilt/${res.data.orderId}`);
       });
     },
-    formValidation() {
-      let confirmButtonClicked = true;
-      const confirmOrderAfterValidation = () => {
-        if (this.alreadyValidated === false) {
-          this.confirmOrder();
-        }
-        this.alreadyValidated = true;
-      };
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation');
-
-      // Loop over them and prevent submission
-      Array.from(forms).forEach((form) => {
-        form.addEventListener('click', (event) => {
-          if (!form.checkValidity()) {
-            confirmButtonClicked = false;
-            event.preventDefault();
-            event.stopPropagation();
-          } else if (form.checkValidity()) {
-            if (confirmButtonClicked === true) {
-              confirmOrderAfterValidation();
-            }
+    // 表單驗證
+    validation(target) {
+      console.log(this.rules[target].required);
+      if (target === 'time') {
+        if (this.rules[target].required === true) {
+          if (this.orderTime) {
+            this.errorMessage[target].required.exist = false;
+          } else {
+            this.errorMessage[target].required.exist = true;
           }
+        }
 
-          form.classList.add('was-validated');
-        }, false);
+        if (this.rules[target].reg !== '') {
+          const testRegResult = this.rules[target].reg.test(this.orderTime);
+          if (testRegResult) {
+            this.errorMessage[target].reg.exist = false;
+          } else {
+            this.errorMessage[target].reg.exist = true;
+          }
+        }
+      } else {
+        if (this.rules[target].required === true) {
+          if (this.orderMessage.user[target]) {
+            this.errorMessage[target].required.exist = false;
+          } else {
+            this.errorMessage[target].required.exist = true;
+          }
+        }
+
+        if (this.rules[target].reg !== '') {
+          const testRegResult = this.rules[target].reg.test(this.orderMessage.user[target]);
+          if (testRegResult === true) {
+            this.errorMessage[target].reg.exist = false;
+          } else {
+            this.errorMessage[target].reg.exist = true;
+          }
+        }
+      }
+    },
+    // 確認訂單
+    finalValidation() {
+      const validationAll = ['time', 'name', 'tel'];
+      let failedValidationCount = 0;
+      validationAll.forEach((item) => {
+        this.validation(item);
+        if (this.errorMessage[item].required.exist === true) {
+          failedValidationCount += 1;
+        }
+        if (this.errorMessage[item].reg.exist === true) {
+          failedValidationCount += 1;
+        }
       });
+      console.log(failedValidationCount);
+
+      if (failedValidationCount === 0) {
+        this.confirmOrder();
+      }
     },
   },
   created() {

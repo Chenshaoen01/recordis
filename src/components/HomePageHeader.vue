@@ -32,7 +32,7 @@ export default {
     return {
       currentParams: '',
       currentImgNum: 1,
-      currentHeaderImgSrc: '',
+      currentHeaderImgSrc: 'headerImg-1',
       ImgSrcTest: 'pexels-thiea-alhoz-5604815',
       imgSrc: [
         'headerImg-1',
@@ -89,7 +89,7 @@ export default {
   },
   created() {
     // 顯示預設的第一張圖片
-    this.currentHeaderImgSrc = this.imgSrc[this.currentImgNum - 1];
+    // this.currentHeaderImgSrc = this.imgSrc[this.currentImgNum - 1];
   },
   mounted() {
     this.changeHeaderImg();

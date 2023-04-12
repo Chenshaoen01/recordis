@@ -1,101 +1,126 @@
 <template>
-  <LoadingPage ref="loadingPage"></LoadingPage>
-  <div class="container" style="max-width: 600px">
-    <form class="mt-3 mb-5 needs-validation" novalidate>
-      <div class="border-bottom border-dark d-flex justify-content-center
-         align-items-center">
-        <div class="my-4 w-50 d-flex justify-content-between
-             align-items-center flex-column flex-md-row">
-          <img src="../assets/images/LOGO/logo1.png" style="width:100px;
-                     height:100px" alt="header-img" class="me-lg-5">
-          <span class="fs-2 d-block mt-2">線上訂位</span>
-        </div>
-      </div>
-      <!-- 預約訂位時間 -->
-      <div class="border-bottom border-dark pb-5">
-        <span class="fs-3 d-block my-4">訂位時間</span>
-        <div class="row row-cols-2 row-cols-md-5 gy-2">
-          <div class="form-check col" v-for="(item) in date" :key="item">
-            <label class="form-check-label btn btn-outline-dark w-100"
-             v-if="this.reservationInfo.date !== item"
-              :for="item">
-              {{ item }}
-              <input class="form-check-input d-none" type="radio" :name="date"
-               :id="item" v-model="reservationInfo.date"
-                :value="item" required :selected="item === this.reservationInfo.date">
-              <div class="invalid-feedback">
-                請選擇訂位日期
-              </div>
-            </label>
-            <label class="form-check-label btn btn-dark w-100"
-             v-if="this.reservationInfo.date === item" :for="item">
-              {{ item }}
-              <input class="form-check-input d-none" type="radio"
-               :name="date" :id="item" v-model="reservationInfo.date"
-                :value="item" required :selected="item === this.reservationInfo.date">
-              <div class="invalid-feedback">
-                請選擇訂位日期
-              </div>
-            </label>
-          </div>
-        </div>
-        <div class="mt-4">
-          <select class="form-select shadow-none"
-           aria-label="Default select example" v-model="reservationInfo.time"
-            required v-if="firstDate === reservationInfo.date">
-            <option disabled selected value="">請選擇訂位時段</option>
-            <option v-for="(item) in timeOptionFirstDay" :key="item.option" :value="item.option"
-              :disabled="item.passed">
-              {{ item.option }}
-            </option>
-          </select>
-          <select class="form-select shadow-none"
-           aria-label="Default select example" v-model="reservationInfo.time"
-            required v-if="firstDate !== reservationInfo.date">
-            <option disabled selected value="">請選擇訂位時段</option>
-            <option v-for="(item) in timeOptionOtherDay" :key="item.option" :value="item.option"
-              :disabled="item.passed">
-              {{ item.option }}
-            </option>
-          </select>
-          <div class="invalid-feedback">
-            請選擇訂位時間
-          </div>
-        </div>
-      </div>
-      <!-- 訂位資訊 -->
-      <div class="mb-5">
-        <span class="fs-3 d-block my-4">訂位者資訊</span>
-        <label for="name" class="w-100 form-label">
-          訂位者姓名
-          <input type="text" class="form-control my-2 shadow-none"
-           v-model="reservationInfo.name" required>
-          <div class="invalid-feedback">
-            請填入姓名
-          </div>
-        </label>
-        <label for="tel" class="w-100 form-label">
-          訂位者連絡電話
-          <input type="tel" class="form-control my-2 shadow-none"
-           v-model="reservationInfo.tel" required>
-          <div class="invalid-feedback">
-            請填入連絡電話
-          </div>
-        </label>
-        <label for="message" class="w-100 form-label">
-          備註
-          <textarea name="" id="" cols="30" rows="5" class="form-control"
-           v-model="reservationInfo.message"></textarea>
-        </label>
-      </div>
-      <div class="text-center">
-        <button type="button" class="btn btn-lg btn-dark" @click="validation"
-        :disabled="submitButtonDisabled" id="formConfirmButton">
-          確認訂位
-        </button>
-      </div>
-    </form>
-  </div>
+    <LoadingPage ref="loadingPage"></LoadingPage>
+    <div class="container" style="max-width: 600px">
+        <form class="mt-3 mb-5">
+            <div class="border-bottom border-dark d-flex justify-content-center
+             align-items-center">
+                <div class="my-4 w-50 d-flex justify-content-between
+                 align-items-center flex-column flex-md-row">
+                    <img src="../assets/images/LOGO/logo1.png"
+                     style="width:100px; height:100px" alt="header-img"
+                        class="me-lg-5">
+                    <span class="fs-2 d-block mt-2">線上訂位</span>
+                </div>
+            </div>
+            <!-- 預約訂位時間 -->
+            <div class="border-bottom border-dark pb-5">
+                <span class="fs-3 d-block my-4">訂位時間</span>
+                <div class="row row-cols-2 row-cols-md-5 gy-2">
+                    <div class="form-check col" v-for="(item) in date" :key="item">
+                        <label class="form-check-label btn btn-outline-dark w-100"
+                         v-if="this.reservationInfo.date !== item" :for="item">
+                            {{ item }}
+                            <input class="form-check-input d-none" type="radio"
+                             :name="date" :id="item"
+                                v-model="reservationInfo.date" :value="item"
+                                :selected="item === this.reservationInfo.date">
+                        </label>
+                        <label class="form-check-label btn btn-dark w-100"
+                         v-if="this.reservationInfo.date === item"
+                            :for="item">
+                            {{ item }}
+                            <input class="form-check-input d-none" type="radio"
+                             :name="date" :id="item"
+                                v-model="reservationInfo.date" :value="item"
+                                :selected="item === this.reservationInfo.date">
+                        </label>
+                        <div class="mb-3 mt-1 text-danger" v-if="errorMessage.date.required.exist">
+                            {{ errorMessage.date.required.message }}
+                        </div>
+                        <div class="mb-3 mt-1 text-danger"
+                          v-if="errorMessage.date.required.exist !== true
+                          && errorMessage.date.reg.exist">
+                            {{ errorMessage.date.reg.message }}
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <select class="form-select shadow-none" aria-label="Default select example"
+                     v-model="reservationInfo.time"  v-if="firstDate === reservationInfo.date"
+                     @change="validation('time')">
+                        <option disabled selected value="">請選擇訂位時段</option>
+                        <option v-for="(item) in timeOptionFirstDay"
+                         :key="item.option" :value="item.option"
+                            :disabled="item.passed">
+                            {{ item.option }}
+                        </option>
+                    </select>
+                    <select class="form-select shadow-none" aria-label="Default select example"
+                     v-model="reservationInfo.time" v-if="firstDate !== reservationInfo.date"
+                      @change="validation('time')">
+                        <option disabled selected value="">請選擇訂位時段</option>
+                        <option v-for="(item) in timeOptionOtherDay"
+                         :key="item.option" :value="item.option"
+                            :disabled="item.passed">
+                            {{ item.option }}
+                        </option>
+                    </select>
+                    <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist">
+                        {{ errorMessage.time.required.message }}
+                    </div>
+                    <div class="mb-3 mt-1 text-danger"
+                        v-if="errorMessage.time.required.exist !== true
+                        && errorMessage.time.reg.exist">
+                        {{ errorMessage.time.reg.message }}
+                    </div>
+                </div>
+            </div>
+            <!-- 訂位資訊 -->
+            <div class="mb-5">
+                <span class="fs-3 d-block my-4">訂位者資訊</span>
+                <label for="name" class="w-100 form-label">
+                    訂位者姓名
+                    <input type="text" class="form-control my-2 shadow-none"
+                     v-model="reservationInfo.name"  @change="validation('name')">
+                    <div class="mb-3 mt-1 text-danger" v-if="errorMessage.name.required.exist">
+                        {{ errorMessage.name.required.message }}
+                    </div>
+                    <div class="mb-3 mt-1 text-danger"
+                        v-if="errorMessage.name.required.exist !== true
+                        && errorMessage.name.reg.exist">
+                        {{ errorMessage.name.reg.message }}
+                    </div>
+                </label>
+                <label for="tel" class="w-100 form-label">
+                    訂位者連絡電話
+                    <input type="number" class="form-control my-2 shadow-none"
+                     v-model="reservationInfo.tel"  @change="validation('tel')">
+                    <div class="invalid-feedback">
+                        請填入連絡電話
+                    </div>
+                    <div class="mb-3 mt-1 text-danger" v-if="errorMessage.tel.required.exist">
+                        {{ errorMessage.tel.required.message }}
+                    </div>
+                    <div class="mb-3 mt-1 text-danger"
+                        v-if="errorMessage.tel.required.exist !== true
+                        && errorMessage.tel.reg.exist">
+                        {{ errorMessage.tel.reg.message }}
+                    </div>
+                </label>
+                <label for="message" class="w-100 form-label">
+                    備註
+                    <textarea name="" id="" cols="30" rows="5" class="form-control"
+                        v-model="reservationInfo.message"></textarea>
+                </label>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-lg btn-dark" @click="confirmReserveation"
+                    :disabled="submitButtonDisabled" id="formConfirmButton">
+                    確認訂位
+                </button>
+            </div>
+        </form>
+    </div>
 </template>
 
 <script>
@@ -179,6 +204,30 @@ export default {
       reservationId: '',
       submitButtonDisabled: false,
       alreadyValidated: false,
+      rules: {
+        date: { required: true, reg: '' },
+        time: { required: true, reg: '' },
+        name: { required: true, reg: /^[\u4e00-\u9fa5_a-za-z]+$/ },
+        tel: { required: true, reg: /^(9)[0-9]{8}$/ },
+      },
+      errorMessage: {
+        date: {
+          required: { exist: false, message: '請選擇日期' },
+          reg: { exist: false, message: '日期格式錯誤' },
+        },
+        time: {
+          required: { exist: false, message: '請選擇時間' },
+          reg: { exist: false, message: '時間格式錯誤' },
+        },
+        name: {
+          required: { exist: false, message: '請填入姓名' },
+          reg: { exist: false, message: '姓名格式錯誤' },
+        },
+        tel: {
+          required: { exist: false, message: '請填入聯絡電話' },
+          reg: { exist: false, message: '聯絡電話格式錯誤' },
+        },
+      },
     };
   },
   components: { LoadingPage },
@@ -191,35 +240,42 @@ export default {
         this.cartContent.final_total = Math.floor(this.cartContent.final_total);
       });
     },
-    // 表單驗證並送出訂單
-    validation() {
-      let confirmButtonClicked = true;
-      const confirmReservationAfterValidation = () => {
-        if (this.alreadyValidated === false) {
-          this.clearCart();
+    // 表單驗證
+    validation(target) {
+      if (this.rules[target].required === true) {
+        if (this.reservationInfo[target]) {
+          this.errorMessage[target].required.exist = false;
+        } else {
+          this.errorMessage[target].required.exist = true;
         }
-        this.alreadyValidated = true;
-        this.$refs.loadingPage.loadingPageShow();
-      };
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation');
-      // Loop over them and prevent submission
-      Array.from(forms).forEach((form) => {
-        form.addEventListener('click', (event) => {
-          form.classList.add('was-validated');
-          if (!form.checkValidity()) {
-            confirmButtonClicked = false;
-            event.preventDefault();
-            event.stopPropagation();
-            form.classList.add('was-validated');
-            // this.submitButtonDisabled = true;
-          } else if (form.checkValidity()) {
-            if (confirmButtonClicked === true) {
-              confirmReservationAfterValidation();
-            }
-          }
-        }, false);
+      }
+
+      if (this.rules[target].reg !== '') {
+        const testRegResult = this.rules[target].reg.test(this.reservationInfo[target]);
+        if (testRegResult === true) {
+          this.errorMessage[target].reg.exist = false;
+        } else {
+          this.errorMessage[target].reg.exist = true;
+        }
+      }
+    },
+    // 確認訂位
+    confirmReserveation() {
+      const validationAll = ['date', 'time', 'name', 'tel'];
+      let failedValidationCount = 0;
+      validationAll.forEach((item) => {
+        this.validation(item);
+        if (this.errorMessage[item].required.exist === true) {
+          failedValidationCount += 1;
+        }
+        if (this.errorMessage[item].reg.exist === true) {
+          failedValidationCount += 1;
+        }
       });
+
+      if (failedValidationCount === 0) {
+        this.clearCart();
+      }
     },
     // 把購物車清空
     clearCart() {

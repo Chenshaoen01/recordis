@@ -20,7 +20,7 @@
             </tr>
             <tr>
               <th class="col-6 text-center">取餐人聯絡電話</th>
-              <td class="col text-center">{{ order.user.tel }}</td>
+              <td class="col text-center">0{{ order.user.tel }}</td>
             </tr>
             <tr>
               <th class="col-6 text-center">

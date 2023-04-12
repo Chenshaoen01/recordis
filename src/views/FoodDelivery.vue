@@ -1,207 +1,239 @@
 <template>
-  <LoadingPage ref="loadingPage"></LoadingPage>
-  <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
-  </messageToast>
-  <div class="container d-flex justify-content-center" style="max-width: 800px">
-    <div class="w-75">
-      <div class="border-bottom border-dark d-flex justify-content-center
-         align-items-center">
-        <div class="my-4 w-50 d-flex justify-content-between
-           align-items-center flex-column flex-md-row">
-          <img src="../assets/images/LOGO/logo1.png"
-           style="width:100px;height:100px" alt="header-img"
-            class="me-lg-5">
-          <span class="fs-2 d-block mt-2">外送到府</span>
-        </div>
-      </div>
-      <div>
-        <!-- 預約餐點內容 -->
-        <div class="border-bottom border-dark py-4">
-          <p class="fs-4">預約訂單內容</p>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col" class="text-center col-5">品項</th>
-                <th scope="col" class="text-center">單價</th>
-                <th scope="col" class="text-center">數量</th>
-                <th scope="col" class="text-center">小計</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item) in cartContent.carts" :key="item.id">
-                <td class="text-center col-5">{{ item.product.title }}</td>
-                <td class="text-center">{{ item.product.price }}</td>
-                <td class="text-center">{{ item.qty }}</td>
-                <td class="text-center">{{ item.total }}</td>
-              </tr>
-              <tr class="text-end">
-                <td colspan="4" class="fs-4 fw-bold">
-                  餐點費用:<span class="ms-3"> {{ cartContent.total }} </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- 優惠券 -->
-        <div class="border-bottom border-dark py-4">
-          <p class="fs-4">優惠券</p>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control shadow-none"
-             v-model="couponCode" placeholder="請輸入優惠券代碼"
-              aria-label="Recipient's username">
-            <button class="btn btn-dark" type="button" @click="coupon">
-              送出優惠券
-            </button>
-          </div>
-        </div>
-        <!-- 消費金額 -->
-        <div class="border-bottom border-dark py-4">
-          <p class="fs-4">消費金額總計</p>
-          <table class="table">
-            <thead>
-              <tr>
-                <th class="text-center w-50" scope="col">項目</th>
-                <th class="text-center w-50" scope="col">費用</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- 各品項及費用 -->
-              <tr>
-                <td class="text-center">餐點費用</td>
-                <td class="text-center">{{ cartContent.total }}</td>
-              </tr>
-              <tr v-if="cartContent.total !== cartContent.final_total">
-                <td class="text-center">{{ cartContent.carts[0].coupon.title }}</td>
-                <td class="text-center">
-                  -{{ cartContent.total - cartContent.final_total }}
-                </td>
-              </tr>
-              <tr v-if="freeDelivery === true">
-                <td class="text-center">外送費用</td>
-                <td class="text-center">0</td>
-              </tr>
-              <tr v-if="freeDelivery === false">
-                <td class="text-center">外送費用</td>
-                <td class="text-center">50</td>
-              </tr>
-              <tr class="text-end">
-                <td></td>
-                <td colspan="2" class="fs-4 fw-bold" v-if="freeDelivery === true">
-                  總計:<span class="ms-3"> {{ cartContent.final_total }}</span>
-                </td>
-                <td colspan="2" class="fs-4 fw-bold" v-if="freeDelivery === false">
-                  總計:<span class="ms-3"> {{ cartContent.final_total + 50 }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!-- 取餐資訊表單 -->
-        <form action="" class="needs-validation" novalidate>
-          <!-- 預約外送時間 -->
-          <div class="border-bottom border-dark py-4">
-            <p class="fs-4">預約外送時間</p>
-            <div class="row row-cols-2 row-cols-md-5 gy-2">
-              <div class="form-check col" v-for="(item) in date" :key="item">
-                <label class="form-check-label btn btn-outline-dark w-100"
-                 v-if="this.orderDate !== item" :for="item"
-                  @click="toggleLink(item)" @keypress="esc">
-                  {{ item }}
-                  <input class="form-check-input d-none" type="radio"
-                   :name="date" :id="item" v-model="orderDate"
-                    :value="item" required :selected="item === this.orderDate">
-                  <div class="invalid-feedback">
-                    請選擇外送日期
-                  </div>
-                </label>
-                <label class="form-check-label btn btn-dark w-100"
-                 v-if="this.orderDate === item" :for="item"
-                  @click="toggleLink(item)" @keypress="esc">
-                  {{ item }}
-                  <input class="form-check-input d-none" type="radio"
-                   :name="date" :id="item" v-model="orderDate"
-                    :value="item" required :selected="item === this.orderDate">
-                  <div class="invalid-feedback">
-                    請選擇外送日期
-                  </div>
-                </label>
-              </div>
-            </div>
-            <div class="mt-4">
-              <div v-if="firstDate === orderDate">
-                  <select class="form-select shadow-none" aria-label="Default select example"
-                 v-model="orderTime" required>
-                  <option disabled selected value="">請選擇取餐時段</option>
-                  <option v-for="(item) in timeOptionFirstDay" :key="item.option"
-                   :value="item.option" :disabled="item.passed">
-                    {{ item.option }}
-                  </option>
-                </select>
-                <div class="invalid-feedback">
-                   請選擇取餐時間
+    <LoadingPage ref="loadingPage"></LoadingPage>
+    <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
+    </messageToast>
+    <div class="container d-flex justify-content-center" style="max-width: 800px">
+        <div class="w-75">
+            <div class="border-bottom border-dark d-flex justify-content-center
+                     align-items-center">
+                <div class="my-4 w-50 d-flex justify-content-between
+                       align-items-center flex-column flex-md-row">
+                    <img src="../assets/images/LOGO/logo1.png"
+                     style="width:100px;height:100px" alt="header-img"
+                        class="me-lg-5">
+                    <span class="fs-2 d-block mt-2">外送到府</span>
                 </div>
-              </div>
-              <div v-if="firstDate !== orderDate">
-                  <select class="form-select shadow-none" aria-label="Default select example"
-                 v-model="orderTime" required>
-                  <option disabled selected value="">請選擇取餐時段</option>
-                  <option v-for="(item) in timeOptionOtherDay" :key="item.option"
-                   :value="item.option" :disabled="item.passed">
-                    {{ item.option }}
-                  </option>
-                </select>
-                <div class="invalid-feedback">
-                   請選擇取餐時間
-                </div>
-              </div>
             </div>
-          </div>
-          <!-- 收件人資訊 -->
-          <div class="border-dark py-4">
-            <p class="fs-4">取餐資訊</p>
-            <label for="name" class="w-100">
-              取餐人姓名
-              <input type="text" class="form-control shadow-none mt-1"
-               v-model="orderMessage.user.name"
-                placeholder="請輸入取餐人姓名" aria-label="Recipient's username" required>
-              <div class="invalid-feedback">
-                請輸入取餐人姓名
-              </div>
-            </label>
-            <label for="tel" class="w-100 mt-3">
-              取餐人連絡電話
-              <input type="tel" class="form-control shadow-none mt-1"
-               v-model="orderMessage.user.tel"
-                placeholder="請輸入取餐人連絡電話" aria-label="Recipient's username" required>
-              <div class="invalid-feedback">
-                請輸入取餐人連絡電話
-              </div>
-            </label>
-            <label for="address" class="w-100 mt-3">
-              外送地址
-              <input type="address" class="form-control shadow-none mt-1"
-               v-model="orderMessage.user.address"
-                placeholder="請輸入外送地址" aria-label="Recipient's username" required>
-              <div class="invalid-feedback">
-                請輸入外送地址
-              </div>
-            </label>
-            <label for="message" class="w-100 mt-3">
-              備註訊息
-              <textarea class="form-control shadow-none mt-1" cols="30"
-               rows="5" v-model="orderMessage.message">
-                </textarea>
-            </label>
-          </div>
-          <div class="py-4 text-center">
-            <button class="btn btn-lg btn-dark px-4" type="button" @click="formValidation">
-              送出訂單
-            </button>
-          </div>
-        </form>
-      </div>
+            <div>
+                <!-- 預約餐點內容 -->
+                <div class="border-bottom border-dark py-4">
+                    <p class="fs-4">預約訂單內容</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-center col-5">品項</th>
+                                <th scope="col" class="text-center">單價</th>
+                                <th scope="col" class="text-center">數量</th>
+                                <th scope="col" class="text-center">小計</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item) in cartContent.carts" :key="item.id">
+                                <td class="text-center col-5">{{ item.product.title }}</td>
+                                <td class="text-center">{{ item.product.price }}</td>
+                                <td class="text-center">{{ item.qty }}</td>
+                                <td class="text-center">{{ item.total }}</td>
+                            </tr>
+                            <tr class="text-end">
+                                <td colspan="4" class="fs-4 fw-bold">
+                                    餐點費用:<span class="ms-3"> {{ cartContent.total }} </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 優惠券 -->
+                <div class="border-bottom border-dark py-4">
+                    <p class="fs-4">優惠券</p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control shadow-none"
+                         v-model="couponCode" placeholder="請輸入優惠券代碼"
+                            aria-label="Recipient's username">
+                        <button class="btn btn-dark" type="button" @click="coupon">
+                            送出優惠券
+                        </button>
+                    </div>
+                </div>
+                <!-- 消費金額 -->
+                <div class="border-bottom border-dark py-4">
+                    <p class="fs-4">消費金額總計</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center w-50" scope="col">項目</th>
+                                <th class="text-center w-50" scope="col">費用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 各品項及費用 -->
+                            <tr>
+                                <td class="text-center">餐點費用</td>
+                                <td class="text-center">{{ cartContent.total }}</td>
+                            </tr>
+                            <tr v-if="cartContent.total !== cartContent.final_total">
+                                <td class="text-center">{{ cartContent.carts[0].coupon.title }}</td>
+                                <td class="text-center">
+                                    -{{ cartContent.total - cartContent.final_total }}
+                                </td>
+                            </tr>
+                            <tr v-if="freeDelivery === true">
+                                <td class="text-center">外送費用</td>
+                                <td class="text-center">0</td>
+                            </tr>
+                            <tr v-if="freeDelivery === false">
+                                <td class="text-center">外送費用</td>
+                                <td class="text-center">50</td>
+                            </tr>
+                            <tr class="text-end">
+                                <td></td>
+                                <td colspan="2" class="fs-4 fw-bold" v-if="freeDelivery === true">
+                                    總計:<span class="ms-3"> {{ cartContent.final_total }}</span>
+                                </td>
+                                <td colspan="2" class="fs-4 fw-bold" v-if="freeDelivery === false">
+                                    總計:<span class="ms-3"> {{ cartContent.final_total + 50 }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 取餐資訊表單 -->
+                <form action="">
+                    <!-- 預約外送時間 -->
+                    <div class="border-bottom border-dark py-4">
+                        <p class="fs-4">預約外送時間</p>
+                        <div class="row row-cols-2 row-cols-md-5 gy-2">
+                            <div class="form-check col" v-for="(item) in date" :key="item">
+                                <label class="form-check-label btn btn-outline-dark w-100"
+                                 v-if="this.orderDate !== item"
+                                    :for="item" @click="toggleLink(item)" @keypress="esc">
+                                    {{ item }}
+                                    <input class="form-check-input d-none" type="radio"
+                                     :name="date" :id="item" v-model="orderDate"
+                                      :value="item" :selected="item === this.orderDate">
+                                    <div class="invalid-feedback">
+                                        請選擇外送日期
+                                    </div>
+                                </label>
+                                <label class="form-check-label btn btn-dark w-100"
+                                 v-if="this.orderDate === item"
+                                    :for="item" @click="toggleLink(item)" @keypress="esc">
+                                    {{ item }}
+                                    <input class="form-check-input d-none" type="radio" :name="date"
+                                     :id="item" v-model="orderDate" :value="item"
+                                      :selected="item === this.orderDate">
+                                    <div class="invalid-feedback">
+                                        請選擇外送日期
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div v-if="firstDate === orderDate">
+                                <select class="form-select shadow-none"
+                                 aria-label="Default select example" v-model="orderTime"
+                                  @change="validation('time')">
+                                    <option disabled selected value="">請選擇取餐時段</option>
+                                    <option v-for="(item) in timeOptionFirstDay"
+                                     :key="item.option" :value="item.option"
+                                      :disabled="item.passed">
+                                        {{ item.option }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div v-if="firstDate !== orderDate">
+                                <select class="form-select shadow-none"
+                                 aria-label="Default select example" v-model="orderTime"
+                                  @change="validation('time')">
+                                    <option disabled selected value="">請選擇取餐時段</option>
+                                    <option v-for="(item) in timeOptionOtherDay"
+                                     :key="item.option" :value="item.option"
+                                        :disabled="item.passed">
+                                        {{ item.option }}
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    請選擇取餐時間
+                                </div>
+                            </div>
+                            <div class="mb-3 mt-1 text-danger"
+                            v-if="errorMessage.time.required.exist">
+                                {{ errorMessage.time.required.message }}
+                            </div>
+                            <div class="mb-3 mt-1 text-danger"
+                             v-if="errorMessage.time.required.exist !== true
+                                && errorMessage.time.reg.exist">
+                                {{ errorMessage.time.reg.message }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 收件人資訊 -->
+                    <div class="border-dark py-4">
+                        <p class="fs-4">取餐資訊</p>
+                        <label for="name" class="w-100">
+                            取餐人姓名
+                            <input type="text" class="form-control shadow-none mt-1"
+                             v-model="orderMessage.user.name"
+                                placeholder="請輸入取餐人姓名" aria-label="Recipient's username"
+                                @change="validation('name')">
+                            <div class="mb-3 mt-1 text-danger"
+                             v-if="errorMessage.name.required.exist">
+                                {{ errorMessage.name.required.message }}
+                            </div>
+                            <div class="mb-3 mt-1 text-danger"
+                             v-if="errorMessage.name.required.exist !== true
+                                && errorMessage.name.reg.exist">
+                                {{ errorMessage.name.reg.message }}
+                            </div>
+                        </label>
+                        <label for="tel" class="w-100 mt-3">
+                            取餐人連絡電話
+                            <input type="number" class="form-control shadow-none mt-1"
+                             v-model="orderMessage.user.tel"
+                                placeholder="請輸入取餐人連絡電話" aria-label="Recipient's username"
+                                @change="validation('tel')">
+                                <div class="mb-3 mt-1 text-danger"
+                                 v-if="errorMessage.tel.required.exist">
+                                  {{ errorMessage.tel.required.message }}
+                                </div>
+                                <div class="mb-3 mt-1 text-danger"
+                                 v-if="errorMessage.tel.required.exist !== true
+                                  && errorMessage.tel.reg.exist">
+                                  {{ errorMessage.tel.reg.message }}
+                                </div>
+                        </label>
+                        <label for="address" class="w-100 mt-3">
+                            外送地址
+                            <input type="address" class="form-control shadow-none mt-1"
+                             v-model="orderMessage.user.address" placeholder="請輸入外送地址"
+                              aria-label="Recipient's username"
+                                @change="validation('address')">
+                                <div class="mb-3 mt-1 text-danger"
+                                 v-if="errorMessage.address.required.exist">
+                  {{ errorMessage.address.required.message }}
+                </div>
+                <div class="mb-3 mt-1 text-danger"
+                 v-if="errorMessage.address.required.exist !== true
+                  && errorMessage.address.reg.exist">
+                  {{ errorMessage.address.reg.message }}
+                </div>
+                        </label>
+                        <label for="message" class="w-100 mt-3">
+                            備註訊息
+                            <textarea class="form-control shadow-none mt-1" cols="30" rows="5"
+                                v-model="orderMessage.message">
+                            </textarea>
+                        </label>
+                    </div>
+                    <div class="py-4 text-center">
+                        <button class="btn btn-lg btn-dark px-4"
+                         type="button" @click="finalValidation">
+                            送出訂單
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 <script>
 import LoadingPage from './LoadingPage.vue';
@@ -287,7 +319,35 @@ export default {
         { option: '20:31 ~ 20:45', passed: false },
         { option: '20:46 ~ 21:00', passed: false },
       ],
-      alreadyValidated: false,
+      rules: {
+        date: { required: true, reg: '' },
+        time: { required: true, reg: '' },
+        name: { required: true, reg: /^[\u4e00-\u9fa5_a-za-z]+$/ },
+        tel: { required: true, reg: /^(9)[0-9]{8}$/ },
+        address: { required: true, reg: '' },
+      },
+      errorMessage: {
+        date: {
+          required: { exist: false, message: '請選擇日期' },
+          reg: { exist: false, message: '日期格式錯誤' },
+        },
+        time: {
+          required: { exist: false, message: '請選擇時間' },
+          reg: { exist: false, message: '時間格式錯誤' },
+        },
+        name: {
+          required: { exist: false, message: '請填入姓名' },
+          reg: { exist: false, message: '姓名格式錯誤' },
+        },
+        tel: {
+          required: { exist: false, message: '請填入聯絡電話' },
+          reg: { exist: false, message: '聯絡電話格式錯誤' },
+        },
+        address: {
+          required: { exist: false, message: '請填入外送地址' },
+          reg: { exist: false, message: '外送地址格式錯誤' },
+        },
+      },
     };
   },
   components: {
@@ -385,33 +445,62 @@ export default {
       }
     },
     // 表單驗證
-    formValidation() {
-      let confirmButtonClicked = true;
-      const confirmOrderAfterValidation = () => {
-        if (this.alreadyValidated === false) {
-          this.confirmOrder();
-        }
-        this.alreadyValidated = true;
-      };
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      const forms = document.querySelectorAll('.needs-validation');
-
-      // Loop over them and prevent submission
-      Array.from(forms).forEach((form) => {
-        form.addEventListener('click', (event) => {
-          if (!form.checkValidity()) {
-            confirmButtonClicked = false;
-            event.preventDefault();
-            event.stopPropagation();
-          } else if (form.checkValidity()) {
-            if (confirmButtonClicked === true) {
-              confirmOrderAfterValidation();
-            }
+    validation(target) {
+      console.log(this.rules[target].required);
+      if (target === 'time') {
+        if (this.rules[target].required === true) {
+          if (this.orderTime) {
+            this.errorMessage[target].required.exist = false;
+          } else {
+            this.errorMessage[target].required.exist = true;
           }
+        }
 
-          form.classList.add('was-validated');
-        }, false);
+        if (this.rules[target].reg !== '') {
+          const testRegResult = this.rules[target].reg.test(this.orderTime);
+          if (testRegResult) {
+            this.errorMessage[target].reg.exist = false;
+          } else {
+            this.errorMessage[target].reg.exist = true;
+          }
+        }
+      } else {
+        if (this.rules[target].required === true) {
+          if (this.orderMessage.user[target]) {
+            this.errorMessage[target].required.exist = false;
+          } else {
+            this.errorMessage[target].required.exist = true;
+          }
+        }
+
+        if (this.rules[target].reg !== '') {
+          const testRegResult = this.rules[target].reg.test(this.orderMessage.user[target]);
+          if (testRegResult === true) {
+            this.errorMessage[target].reg.exist = false;
+          } else {
+            this.errorMessage[target].reg.exist = true;
+          }
+        }
+      }
+    },
+    // 確認訂單
+    finalValidation() {
+      const validationAll = ['time', 'name', 'tel', 'address'];
+      let failedValidationCount = 0;
+      validationAll.forEach((item) => {
+        this.validation(item);
+        if (this.errorMessage[item].required.exist === true) {
+          failedValidationCount += 1;
+        }
+        if (this.errorMessage[item].reg.exist === true) {
+          failedValidationCount += 1;
+        }
       });
+      console.log(failedValidationCount);
+
+      if (failedValidationCount === 0) {
+        this.confirmOrder();
+      }
     },
   },
   created() {
