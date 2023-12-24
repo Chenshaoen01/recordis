@@ -1,16 +1,15 @@
 <template>
   <LoadingPage ref="loadingPage"></LoadingPage>
-  <div class="container" style="max-width:1000px;">
+  <div class="container max-w-xl">
     <!-- 上半 -->
     <div class="row mt-5 mb-3">
       <!-- 左邊 -->
       <div class="col" data-aos="fade-down" data-aos-duration="1000">
          <!-- 左上 -->
-         <div class="w-100 bg-light mb-3" style="height:450px;"
-          id="aboutUsImg1"></div>
+         <div id="aboutUsImg1" class="w-100 bg-light mb-3 about-img-sm"></div>
          <!-- 左下 -->
          <div class="w-100 border border-2 border-dark mb-3 d-flex flex-column
-          justify-content-center align-items-center" style="height: 300px;">
+          justify-content-center align-items-center about-text-sm">
           <h2 class="fw-bold mb-5 px-2">
             有機栽種 <br class="d-block d-md-none">安全衛生
           </h2>
@@ -22,8 +21,7 @@
       <div class="col" data-aos="fade-up" data-aos-duration="1000">
           <!-- 右上 -->
          <div class="w-100 border border-2 border-dark mb-3 d-flex flex-column
-          justify-content-center align-items-center"
-            style="height: 300px;">
+          justify-content-center align-items-center about-text-sm">
             <h2 class="fw-bold mb-5 px-2">
               手工麵條 <br class="d-block d-md-none">口感獨特
             </h2>
@@ -31,15 +29,14 @@
             <p class="fw-bold">獨特的口感令人難忘</p>
          </div>
          <!-- 右下 -->
-         <div class="w-100 bg-light mb-3" style="height: 450px;"
-          id="aboutUsImg2"></div>
+         <div id="aboutUsImg2" class="w-100 bg-light mb-3 about-img-sm"></div>
       </div>
     </div>
     <!-- 下半 -->
     <div class="mb-5" data-aos="fade-left" data-aos-once="true" data-aos-duration="1000">
-      <div class="bg-danger w-100 mb-3" style="height:250px" id="aboutUsImg3"></div>
+      <div id="aboutUsImg3" class="bg-danger w-100 mb-3 about-img-lg"></div>
       <div class="w-100 border border-2 border-dark mb-3 d-flex flex-column
-          justify-content-center align-items-center" style="height:550px">
+          justify-content-center align-items-center about-text-lg">
           <h2 class="fw-bold mb-5 text-center">
             Recordis <br class="d-block d-md-none"> 在拉丁文中代表著記憶
           </h2>
@@ -59,11 +56,6 @@ import AOS from 'aos';
 import LoadingPage from './LoadingPage.vue';
 
 export default {
-  data() {
-    return {
-
-    };
-  },
   components: {
     LoadingPage,
   },

@@ -1,12 +1,13 @@
 <template>
-  <div class="w-100 opacity-100 position-absolute overflow-hidden
-   d-flex justify-content-center" id="homePageHeader" style="height:500px;">
-    <img :src="require(`../assets/images/others/${currentHeaderImgSrc}.jpg`)"
-     alt="" id="homepage-header-image">
+  <div class="w-100 height-md opacity-100 position-absolute overflow-hidden
+   justify-content-center" id="homePageHeader">
+    <img :src="require(`../assets/images/others/${item}`)" alt=""
+     class="homepage-header-image position-absolute"
+     v-for="(item, index) in imgUrl" :key="item+index">
   </div>
   <div class="position-relative d-flex flex-column justify-content-center
      align-items-center" id="homepage-header-content">
-    <img src="../assets/images/LOGO/logo1.png" style="width:250px; height:250px" alt="header-img">
+    <img src="../assets/images/LOGO/logo1.png" class="width-sm height-sm" alt="header-img">
     <div class="text-dark mt-3 d-flex flex-column flex-md-row">
       <router-link to="/about" class="text-dark fs-4 fw-bold
        text-decoration-none mb-2 mb-md-0">
@@ -30,79 +31,12 @@
 export default {
   data() {
     return {
-      currentParams: '',
-      currentImgNum: 1,
-      currentHeaderImgSrc: 'headerImg-1',
-      ImgSrcTest: 'pexels-thiea-alhoz-5604815',
-      imgSrc: [
-        'headerImg-1',
-        'headerImg-2',
-        'headerImg-3',
+      imgUrl: [
+        'headerImg-1.jpg',
+        'headerImg-2.jpg',
+        'headerImg-3.jpg',
       ],
-      keepInterval: true,
     };
-  },
-  methods: {
-    changeImgNum() {
-      if (this.currentImgNum !== 3) {
-        // 切換圖片
-        this.currentImgNum += 1;
-        this.currentHeaderImgSrc = this.imgSrc[this.currentImgNum - 1];
-      } else if (this.currentImgNum === 3) {
-        // 切換圖片
-        this.currentImgNum = 1;
-        this.currentHeaderImgSrc = this.imgSrc[this.currentImgNum - 1];
-      }
-    },
-    changeOpacityVisible() {
-      const homePageHeader = document.getElementById('homePageHeader');
-      homePageHeader.classList.remove('opacity-0');
-      homePageHeader.classList.add('opacity-100');
-    },
-    changeOpacityInvisible() {
-      const homePageHeader = document.getElementById('homePageHeader');
-      homePageHeader.classList.remove('opacity-100');
-      homePageHeader.classList.add('opacity-0');
-    },
-    changeHeaderImg() {
-      const changeImgOpacity = setInterval(() => {
-        if (this.keepInterval === true) {
-          setTimeout(() => {
-            this.changeOpacityInvisible();
-          }, 0);
-          setTimeout(() => {
-            this.changeImgNum();
-          }, 2200);
-          setTimeout(() => {
-            this.changeOpacityVisible();
-          }, 2500);
-        }
-      }, 5000);
-      // 停止執行更換headerImg
-      setInterval(() => {
-        if (this.keepInterval === false) {
-          // clearInterval(changeImgNum);
-          clearInterval(changeImgOpacity);
-        }
-      }, 3000);
-    },
-  },
-  created() {
-    // 顯示預設的第一張圖片
-    // this.currentHeaderImgSrc = this.imgSrc[this.currentImgNum - 1];
-  },
-  mounted() {
-    this.changeHeaderImg();
-    this.changeOpacityInvisible();
-    setTimeout(() => {
-      this.changeImgNum();
-    }, 2200);
-    setTimeout(() => {
-      this.changeOpacityVisible();
-    }, 2500);
-  },
-  beforeUnmount() {
-    this.keepInterval = false;
   },
 };
 </script>

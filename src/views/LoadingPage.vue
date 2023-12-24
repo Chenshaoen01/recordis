@@ -1,18 +1,12 @@
 <template>
-  <div id="loading" class="d-none top-0 bg-light"
-   style="width:100vw; height:100vh; z-index:10000000;">
+  <div id="loading" class="d-none top-0 bg-light">
     <div class="position-fixed top-50 start-50 translate-middle">
-      <img src="../assets/images/LOGO/logo1.png" style="width:300px; height:300px" alt="header-img">
-      <br>
+      <img src="../assets/images/LOGO/logo1.png" class="loading-page-logo" alt="header-img">
       <span class="fs-2 d-block text-center">資料載入中</span>
-      <br>
       <div class="progress" role="progressbar" aria-label="Animated striped"
        aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
-        <div class="progress-bar bg-dark progress-bar-striped progress-bar-animated"
-         style="width: 100%"></div>
+        <div class="progress-bar bg-dark progress-bar-striped progress-bar-animated w-100"></div>
       </div>
-      <!-- <div class="spinner-border text-dark mx-auto"
-         style="width: 3rem; height: 3rem;" role="status"></div> -->
     </div>
   </div>
 </template>

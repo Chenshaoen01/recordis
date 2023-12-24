@@ -1,18 +1,17 @@
 <template>
   <SpinnerLoadingPage ref="spinnerLoadingPage"></SpinnerLoadingPage>
-  <div class="modal modal-lg" tabindex="-1" id="orderModal" style="z-index:10000;">
+  <div class="modal modal-lg" tabindex="-1" id="orderModal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
-          <div class="container" style="max-width:500px">
+          <div class="container max-w-md">
             <!-- 標題 -->
             <div class="border-bottom border-dark d-flex justify-content-center
               align-items-center">
               <div class="my-4 d-flex justify-content-between
                 align-items-center flex-column flex-md-row">
-                <img src="../assets/images/LOGO/logo1.png"
-                 style="width:100px; height:100px" alt="header-img"
-                  class="me-md-5">
+                <img src="../assets/images/LOGO/logo1.png" alt="header-img"
+                     class="width-xs height-xs me-md-5">
                 <span class="fs-2 d-block mt-2">預訂餐點</span>
               </div>
             </div>
@@ -36,7 +35,6 @@
                       <th class="col-4">品項</th>
                       <th class="text-center">單價</th>
                       <th class="text-center">數量</th>
-                      <!-- <th>小計</th> -->
                       <th class="col-1"></th>
                     </tr>
                   </thead>
@@ -46,19 +44,17 @@
                       <td class="text-center">{{ item.product.price }}</td>
                       <td class="text-center">
                         <!-- 減少一個 -->
-                        <button type="button" class="btn btn-sm rounded-circle
+                        <button type="button" class="count-btn btn btn-sm rounded-circle
                          btn-outline-dark me-1 me-sm-3 text-center p-0"
-                          @click="changeQty(item.id, i, item.qty-1)"
-                          style="width:20px; height:20px; line-height: 20px;">
+                          @click="changeQty(item.id, i, item.qty-1)">
                           <i class="bi bi-dash-lg"></i>
                         </button>
                         <!-- 數量 -->
                         {{ item.qty }}
                         <!-- 增加一個 -->
-                        <button type="button" class="btn btn-sm rounded-circle
+                        <button type="button" class="count-btn btn btn-sm rounded-circle
                          btn-outline-dark ms-1 ms-sm-3 text-center p-0"
-                          @click="changeQty(item.id, i, item.qty+1)"
-                          style="width:20px; height:20px; line-height: 20px;">
+                          @click="changeQty(item.id, i, item.qty+1)">
                           <i class="bi bi-plus-lg"></i>
                         </button>
                       </td>

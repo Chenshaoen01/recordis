@@ -1,5 +1,15 @@
+#orderModal {
+    z-index:10000;
+}
+
 #empty-bag-Img{
     font-size: 8rem;
+}
+
+.count-btn {
+    width:20px; 
+    height:20px; 
+    line-height: 20px;
 }
 
 @media (min-width: 768px) {

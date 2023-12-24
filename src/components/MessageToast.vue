@@ -1,8 +1,8 @@
 <template>
     <div class="toast position-fixed end-0 shadow-none" role="alert"
-     aria-live="assertive" aria-atomic="true" style="top: 90px">
+     aria-live="assertive" aria-atomic="true">
         <div class="toast-body bg-dark text-white">
-           {{ messageReceived }}
+           {{ this.toastMessage }}
         </div>
     </div>
 </template>
@@ -14,11 +14,12 @@ export default {
   data() {
     return {
       toast: [],
+      toastMessage: '',
     };
   },
-  props: ['messageReceived'],
   methods: {
-    toastShow() {
+    toastShow(message) {
+      this.toastMessage = message;
       this.toast.forEach((item) => {
         item.show();
       });

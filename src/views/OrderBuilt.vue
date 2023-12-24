@@ -2,11 +2,11 @@
   <LoadingPage ref="loadingPage"></LoadingPage>
   <div class="container py-5">
     <div class="py-5 text-center border rounded-5 border-dark border-3 ">
-      <i class="bi bi-cart-check" style="font-size:10rem; color:black;"></i>
+      <i class="bi bi-cart-check icon-large"></i>
       <h1>訂單建立成功</h1>
       <div class="my-5">
         <h3 class="w-100">取餐人資訊</h3>
-        <table class="table mx-auto mb-5" style="max-width:600px">
+        <table class="table mx-auto mb-5 max-w-md">
           <tbody>
             <tr>
               <th class="col-6 text-center">類別</th>
@@ -27,7 +27,7 @@
                 <span class="d-block mt-2">取餐時間</span>
               </th>
               <td class="col">
-                <div class="text-start mt-auto mx-auto" style="max-width:150px">
+                <div class="text-start mt-auto mx-auto max-w-xs">
                   日期：{{ this.orderTime.month }}月{{ this.orderTime.day }}日
                   <br>
                   時間：{{ this.orderTime.time }}
@@ -41,7 +41,7 @@
           </tbody>
         </table>
         <h3 class="w-100">餐點內容</h3>
-        <table class="table mx-auto mb-3" style="max-width:600px">
+        <table class="table mx-auto mb-3 max-w-md">
           <tbody>
             <tr>
               <th class="text-center col-6">餐點名稱</th>

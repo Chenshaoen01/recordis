@@ -1,15 +1,16 @@
 <template>
+  <SpinnerLoadingPage ref="spinnerLoadingPage"></SpinnerLoadingPage>
   <LoadingPage ref="loadingPage"></LoadingPage>
-  <messageToast ref="messageToast" :messageReceived="toastMessage" style="z-index:100">
+  <messageToast ref="messageToast" class="z-index-low">
   </messageToast>
-  <div class="container d-flex justify-content-center" style="max-width: 800px">
+  <div class="container d-flex justify-content-center max-w-lg">
     <div class="w-75">
       <div class="border-bottom border-dark d-flex justify-content-center
            align-items-center">
         <div class="my-4 w-50 d-flex justify-content-between
              align-items-center flex-column flex-md-row">
-          <img src="../assets/images/LOGO/logo1.png"
-           style="width:100px; height:100px" alt="header-img" class="me-lg-5">
+             <img src="../assets/images/LOGO/logo1.png" alt="header-img"
+                  class="me-lg-5 width-xs height-xs">
           <span class="fs-2 d-block mt-2">預約外帶</span>
         </div>
       </div>
@@ -45,9 +46,10 @@
         <div class="border-bottom border-dark py-4">
           <p class="fs-4">優惠券</p>
           <div class="input-group mb-3">
-            <input type="text" class="form-control shadow-none"
-             v-model="couponCode" placeholder="請輸入優惠券代碼"
-              aria-label="Recipient's username">
+            <label for="couponinput">
+              <input id="couponinput" type="text" class="form-control shadow-none"
+               v-model="couponCode" placeholder="請輸入優惠券代碼">
+            </label>
             <button class="btn btn-dark" type="button" @click="coupon">
               送出優惠券
             </button>
@@ -90,60 +92,39 @@
           <div class="border-bottom border-dark py-4">
             <p class="fs-4">預約取餐時間</p>
             <div class="row row-cols-2 row-cols-md-5 gy-2">
-              <div class="form-check col" v-for="(item) in date" :key="item">
+              <!-- 預約取餐日期 -->
+              <div class="form-check col" v-for="(item) in dateOptions" :key="item">
                 <label class="form-check-label btn btn-outline-dark w-100"
-                 v-if="this.orderDate !== item" :for="item">
+                 v-if="form.orderDate.value !== item" :for="item">
                   {{ item }}
                   <input class="form-check-input d-none" type="radio"
-                   :name="date" :id="item" v-model="orderDate"
-                    :value="item" required :selected="item === this.orderDate">
+                   :name="date" :id="item" v-model="form.orderDate.value"
+                    :value="item" required :selected="item === form.orderDate.value">
                 </label>
                 <label class="form-check-label btn btn-dark w-100"
-                 v-if="this.orderDate === item" :for="item">
+                 v-if="form.orderDate.value === item" :for="item">
                   {{ item }}
                   <input class="form-check-input d-none" type="radio"
-                   :name="date" :id="item" v-model="orderDate"
-                    :value="item" required :selected="item === this.orderDate">
+                   :name="date" :id="item" v-model="form.orderDate.value"
+                    :value="item" required :selected="item === form.orderDate.value">
                 </label>
               </div>
             </div>
             <div class="mt-4">
-              <div v-if="firstDate === orderDate">
-                <select class="form-select shadow-none" aria-label="Default select example"
-                 v-model="orderTime" required
-                  @change="validation('time')">
-                  <option disabled selected value="">請選擇取餐時段</option>
-                  <option v-for="(item) in timeOptionFirstDay" :key="item.option"
-                   :value="item.option"
-                    :disabled="item.passed">
-                    {{ item.option }}
-                  </option>
-                </select>
-                <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist">
-                  {{ errorMessage.time.required.message }}
-                </div>
-                <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist !== true
-                  && errorMessage.time.reg.exist">
-                  {{ errorMessage.time.reg.message }}
-                </div>
-              </div>
-              <div v-if="firstDate !== orderDate">
-                <select class="form-select shadow-none" aria-label="Default select example"
-                v-model="orderTime" required
-                  @change="validation('time')">
-                  <option disabled selected value="">請選擇取餐時段</option>
-                  <option v-for="(item) in timeOptionOtherDay"
-                   :key="item.option" :value="item.option"
-                    :disabled="item.passed">
-                    {{ item.option }}
-                  </option>
-                </select>
-                <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist">
-                  {{ errorMessage.time.required.message }}
-                </div>
-                <div class="mb-3 mt-1 text-danger" v-if="errorMessage.time.required.exist !== true
-                  && errorMessage.time.reg.exist">
-                  {{ errorMessage.time.reg.message }}
+              <!-- 預約取餐時段 -->
+              <div>
+                <label for="orderTimeInut" class="w-100">
+                  <select id="orderTimeInut" class="form-select shadow-none"
+                   v-model="form.orderTime.value" @change="validation('orderTime')">
+                    <option disabled selected invisible value="">請選擇取餐時段</option>
+                    <option v-for="(item) in timeOptions" :key="item.option" :value="item.option"
+                      :disabled="item.passed && dateOptions['0'] === this.form.orderDate.value">
+                      {{ item.option }}
+                    </option>
+                  </select>
+                </label>
+                <div class="mb-3 mt-1 text-danger" v-if="form.orderTime.errorMessage">
+                  {{ form.orderTime.errorMessage }}
                 </div>
               </div>
             </div>
@@ -154,39 +135,31 @@
             <label for="name" class="w-100">
               取餐人姓名
               <input type="text" class="form-control shadow-none mt-1"
-               v-model="orderMessage.user.name"
-               placeholder="請輸入取餐人姓名" aria-label="Recipient's username"
-                required @change="validation('name')">
-              <div class="mb-3 mt-1 text-danger" v-if="errorMessage.name.required.exist">
-                {{ errorMessage.name.required.message }}
-              </div>
-              <div class="mb-3 mt-1 text-danger" v-if="errorMessage.name.required.exist !== true
-                && errorMessage.name.reg.exist">
-                {{ errorMessage.name.reg.message }}
-              </div>
+              v-model="form.name.value" placeholder="請輸入取餐人姓名" @change="validation('name')">
+                <div class="mb-3 mt-1 text-danger" v-if="form.name.errorMessage">
+                  {{ form.name.errorMessage }}
+                </div>
             </label>
             <label for="name" class="w-100 mt-3">
               取餐人聯絡電話
-              <input type="number" class="form-control shadow-none mt-1"
-               v-model="orderMessage.user.tel" placeholder="請輸入取餐人連絡電話"
-                aria-label="Recipient's username" required @change="validation('tel')">
-              <div class="mb-3 mt-1 text-danger" v-if="errorMessage.tel.required.exist">
-                {{ errorMessage.tel.required.message }}
-              </div>
-              <div class="mb-3 mt-1 text-danger" v-if="errorMessage.tel.required.exist !== true
-                && errorMessage.tel.reg.exist">
-                {{ errorMessage.tel.reg.message }}
-              </div>
+              <input type="tel" class="form-control shadow-none mt-1"
+              v-model="form.tel.value" placeholder="請輸入取餐人連絡電話" @change="validation('tel')">
+                <div class="mb-3 mt-1 text-danger" v-if="form.tel.errorMessage">
+                  {{ form.tel.errorMessage }}
+                </div>
             </label>
             <label for="message" class="w-100 mt-3">
               備註訊息
               <textarea class="form-control shadow-none mt-1"
-               cols="30" rows="5" v-model="orderMessage.message">
+               cols="30" rows="5" v-model="form.message.value">
                   </textarea>
+                <div class="mb-3 mt-1 text-danger" v-if="form.tel.errorMessage">
+                  {{ form.message.errorMessage }}
+                </div>
             </label>
           </div>
           <div class="py-4 text-center">
-            <button class="btn btn-lg btn-dark px-4" type="button" @click="finalValidation">
+            <button class="btn btn-lg btn-dark px-4" type="button" @click="validateBeforeSubmit">
               送出訂單
             </button>
           </div>
@@ -197,116 +170,62 @@
 </template>
 
 <script>
+import formMixin from '../mixins/form_mixin';
 import LoadingPage from './LoadingPage.vue';
+import SpinnerLoadingPage from './SpinnerLoadingPage.vue';
 import messageToast from '../components/MessageToast.vue';
 
 export default {
+  mixins: [formMixin],
   data() {
     return {
       modal: {},
-      date: [],
       couponCode: '',
       cartContent: {},
-      orderDate: {},
-      orderTime: '',
-      orderMessage: {
-        user: {
-          name: '',
-          email: '',
-          tel: '',
-          address: '自取',
+      form: {
+        orderDate: {
+          value: '', columnName: '日期', required: true, type: '', errorMessage: '',
         },
-        message: '',
+        orderTime: {
+          value: '', columnName: '時間', required: true, type: '', errorMessage: '',
+        },
+        name: {
+          value: '', columnName: '姓名', required: true, type: 'name', errorMessage: '',
+        },
+        email: {
+          value: '', columnName: 'Email', required: false, type: '', errorMessage: '',
+        },
+        tel: {
+          value: '', columnName: '電話', required: true, type: 'tel', errorMessage: '',
+        },
+        address: {
+          value: '', columnName: '地址', required: true, type: '', errorMessage: '',
+        },
+        message: {
+          value: '', columnName: '備註', required: false, type: '', errorMessage: '',
+        },
       },
-      firstDate: '',
-      timeOptionFirstDay: [
-        { option: '11:01 ~ 11:15', passed: false },
-        { option: '11:16 ~ 11:30', passed: false },
-        { option: '11:31 ~ 11:45', passed: false },
-        { option: '11:46 ~ 12:00', passed: false },
-        { option: '12:01 ~ 12:15', passed: false },
-        { option: '12:16 ~ 12:30', passed: false },
-        { option: '12:31 ~ 12:45', passed: false },
-        { option: '12:46 ~ 13:00', passed: false },
-        { option: '13:01 ~ 13:15', passed: false },
-        { option: '13:16 ~ 13:30', passed: false },
-        { option: '13:31 ~ 13:45', passed: false },
-        { option: '13:46 ~ 14:00', passed: false },
-        { option: '17:01 ~ 17:15', passed: false },
-        { option: '17:16 ~ 17:30', passed: false },
-        { option: '17:31 ~ 17:45', passed: false },
-        { option: '17:46 ~ 18:00', passed: false },
-        { option: '18:01 ~ 18:15', passed: false },
-        { option: '18:16 ~ 18:30', passed: false },
-        { option: '18:31 ~ 18:45', passed: false },
-        { option: '18:46 ~ 19:00', passed: false },
-        { option: '19:01 ~ 19:15', passed: false },
-        { option: '19:16 ~ 19:30', passed: false },
-        { option: '19:31 ~ 19:45', passed: false },
-        { option: '19:46 ~ 20:00', passed: false },
-        { option: '20:01 ~ 20:15', passed: false },
-        { option: '20:16 ~ 20:30', passed: false },
-        { option: '20:31 ~ 20:45', passed: false },
-        { option: '20:46 ~ 21:00', passed: false },
-      ],
-      timeOptionOtherDay: [
-        { option: '11:01 ~ 11:15', passed: false },
-        { option: '11:16 ~ 11:30', passed: false },
-        { option: '11:31 ~ 11:45', passed: false },
-        { option: '11:46 ~ 12:00', passed: false },
-        { option: '12:01 ~ 12:15', passed: false },
-        { option: '12:16 ~ 12:30', passed: false },
-        { option: '12:31 ~ 12:45', passed: false },
-        { option: '12:46 ~ 13:00', passed: false },
-        { option: '13:01 ~ 13:15', passed: false },
-        { option: '13:16 ~ 13:30', passed: false },
-        { option: '13:31 ~ 13:45', passed: false },
-        { option: '13:46 ~ 14:00', passed: false },
-        { option: '17:01 ~ 17:15', passed: false },
-        { option: '17:16 ~ 17:30', passed: false },
-        { option: '17:31 ~ 17:45', passed: false },
-        { option: '17:46 ~ 18:00', passed: false },
-        { option: '18:01 ~ 18:15', passed: false },
-        { option: '18:16 ~ 18:30', passed: false },
-        { option: '18:31 ~ 18:45', passed: false },
-        { option: '18:46 ~ 19:00', passed: false },
-        { option: '19:01 ~ 19:15', passed: false },
-        { option: '19:16 ~ 19:30', passed: false },
-        { option: '19:31 ~ 19:45', passed: false },
-        { option: '19:46 ~ 20:00', passed: false },
-        { option: '20:01 ~ 20:15', passed: false },
-        { option: '20:16 ~ 20:30', passed: false },
-        { option: '20:31 ~ 20:45', passed: false },
-        { option: '20:46 ~ 21:00', passed: false },
-      ],
       rules: {
         date: { required: true, reg: '' },
         time: { required: true, reg: '' },
-        name: { required: true, reg: /^[\u4e00-\u9fa5_a-za-z]+$/ },
-        tel: { required: true, reg: /^(9)[0-9]{8}$/ },
-      },
-      errorMessage: {
-        date: {
-          required: { exist: false, message: '請選擇日期' },
-          reg: { exist: false, message: '日期格式錯誤' },
-        },
-        time: {
-          required: { exist: false, message: '請選擇時間' },
-          reg: { exist: false, message: '時間格式錯誤' },
-        },
-        name: {
-          required: { exist: false, message: '請填入姓名' },
-          reg: { exist: false, message: '姓名格式錯誤' },
-        },
-        tel: {
-          required: { exist: false, message: '請填入聯絡電話' },
-          reg: { exist: false, message: '聯絡電話格式錯誤' },
-        },
+        name: { required: true, reg: /^[\u4e00-\u9fa5_a-zA-Z]/ },
+        tel: { required: true, reg: /09\d{8}/ },
       },
     };
   },
   components: {
-    LoadingPage, messageToast,
+    LoadingPage, SpinnerLoadingPage, messageToast,
+  },
+  created() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+
+    this.form.address.value = '自取';
+  },
+  mounted() {
+    this.getCartContent();
   },
   methods: {
     // 取得預訂內容
@@ -319,149 +238,10 @@ export default {
         this.$refs.loadingPage.loadingPageHide();
       });
     },
-    // 套用優惠券
-    coupon() {
-      this.$refs.loadingPage.loadingPageShow();
-      const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/coupon`;
-      const data = {
-        data: {
-          code: `${this.couponCode}`,
-        },
-      };
-      this.axios.post(api, data).then((res) => {
-        this.getCartContent();
-        this.$refs.loadingPage.loadingPageHide();
-
-        if (res.data.success) {
-          this.toastMessage = '已成功使用優惠代碼';
-          this.$refs.messageToast.toastShow();
-        } else {
-          this.toastMessage = '優惠代碼輸入錯誤或已超過使用期限';
-          this.$refs.messageToast.toastShow();
-        }
-      });
-    },
     // 送出訂單並跳轉至訂單完成頁面
     confirmOrder() {
-      const data = {
-        data: {
-          user: {
-            name: `${this.orderMessage.user.name}`,
-            email: `${this.orderDate}/${this.orderTime}`,
-            tel: `${this.orderMessage.user.tel}`,
-            address: '自取',
-          },
-          message: `${this.orderMessage.message}`,
-        },
-      };
-      const api = `${process.env.VUE_APP_PATH}api/${process.env.VUE_APP_NAME}/order`;
-      this.axios.post(api, data).then((res) => {
-        this.$router.push(`/orderbuilt/${res.data.orderId}`);
-      });
+      this.submit();
     },
-    // 表單驗證
-    validation(target) {
-      console.log(this.rules[target].required);
-      if (target === 'time') {
-        if (this.rules[target].required === true) {
-          if (this.orderTime) {
-            this.errorMessage[target].required.exist = false;
-          } else {
-            this.errorMessage[target].required.exist = true;
-          }
-        }
-
-        if (this.rules[target].reg !== '') {
-          const testRegResult = this.rules[target].reg.test(this.orderTime);
-          if (testRegResult) {
-            this.errorMessage[target].reg.exist = false;
-          } else {
-            this.errorMessage[target].reg.exist = true;
-          }
-        }
-      } else {
-        if (this.rules[target].required === true) {
-          if (this.orderMessage.user[target]) {
-            this.errorMessage[target].required.exist = false;
-          } else {
-            this.errorMessage[target].required.exist = true;
-          }
-        }
-
-        if (this.rules[target].reg !== '') {
-          const testRegResult = this.rules[target].reg.test(this.orderMessage.user[target]);
-          if (testRegResult === true) {
-            this.errorMessage[target].reg.exist = false;
-          } else {
-            this.errorMessage[target].reg.exist = true;
-          }
-        }
-      }
-    },
-    // 確認訂單
-    finalValidation() {
-      const validationAll = ['time', 'name', 'tel'];
-      let failedValidationCount = 0;
-      validationAll.forEach((item) => {
-        this.validation(item);
-        if (this.errorMessage[item].required.exist === true) {
-          failedValidationCount += 1;
-        }
-        if (this.errorMessage[item].reg.exist === true) {
-          failedValidationCount += 1;
-        }
-      });
-      console.log(failedValidationCount);
-
-      if (failedValidationCount === 0) {
-        this.confirmOrder();
-      }
-    },
-  },
-  created() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  },
-  mounted() {
-    // 取得未來五天的日期
-    const today = new Date();
-
-    for (let n = 1; n <= 5; n += 1) {
-      const tomorrow = new Date();
-      tomorrow.setTime(today.getTime() + 1000 * 60 * 60 * 24 * (n - 1));
-      // 產生往後五天的日期陣列
-      const nextDate = `${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`;
-      this.date.push(nextDate);
-      if (n === 1) {
-        // 預設取餐日期為今天
-        this.orderDate = `${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`;
-        // 存取今天的日期
-        this.firstDate = `${tomorrow.getMonth() + 1}/${tomorrow.getDate()}`;
-      }
-    }
-
-    // 計算時間選項
-    const firstMinuteToday = new Date();
-    firstMinuteToday.setTime(today.getTime());
-    firstMinuteToday.setHours(11);
-    firstMinuteToday.setMinutes(0);
-    firstMinuteToday.setSeconds(0);
-
-    const timeCount = Math.floor((today.getTime() - firstMinuteToday.getTime()) / (1000 * 60 * 15));
-
-    for (let m = 1; m <= timeCount; m += 1) {
-      if (m <= 12) {
-        this.timeOptionFirstDay[m - 1].passed = true;
-        console.log(m, this.timeOptionFirstDay[m - 1]);
-      } else if (m >= 25 && m <= 40) {
-        this.timeOptionFirstDay[m - 13].passed = true;
-        console.log(this.timeOptionFirstDay[m - 13]);
-      }
-    }
-
-    this.getCartContent();
   },
 };
 </script>
