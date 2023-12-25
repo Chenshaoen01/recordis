@@ -13,15 +13,10 @@
        text-decoration-none mb-2 mb-md-0">
         關於我們
       </router-link>
-      <span class="mx-5 fs-4 d-none d-md-block">X</span>
+      <span class="mx-5 fs-4 d-none d-md-block"></span>
       <router-link to="/productlist" class="text-dark fs-4 fw-bold
        text-decoration-none mb-2 mb-md-0">
         菜單介紹
-      </router-link>
-      <span class="mx-5 fs-4 d-none d-md-block">X</span>
-      <router-link to="/reservation" class="text-dark fs-4 fw-bold
-       text-decoration-none mb-2 mb-md-0">
-        線上訂位
       </router-link>
     </div>
   </div>

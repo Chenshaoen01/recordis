@@ -1,4 +1,3 @@
-<!-- eslint-disable vuejs-accessibility/anchor-has-content -->
 <template>
   <!-- navbar -->
   <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark sticky-top" id="navBar">
@@ -102,10 +101,6 @@ export default {
         top: 0,
         behavior: 'smooth',
       });
-    },
-    scroll() {
-      const navBar = document.getElementById('navBar');
-      console.log(navBar);
     },
     countAmoutOfOrders(amout) {
       this.amoutOfOrders = amout;
